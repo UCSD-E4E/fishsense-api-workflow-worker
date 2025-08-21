@@ -6,7 +6,6 @@ import os
 import time
 from importlib.metadata import version
 from pathlib import Path
-from typing import Dict
 
 import platformdirs
 import validators
@@ -42,8 +41,16 @@ def get_config_path() -> Path:
 
 
 validators = [
-    Validator("temporal.host", required=True, cast=str),
+    Validator("temporal.host", required=True, cast=str, condition=validators.hostname),
     Validator("temporal.port", required=True, cast=str, default=7233),
+    Validator("label_studio.host", required=True, condition=validators.hostname),
+    Validator("label_studio.api_key", required=True, cast=str),
+    Validator(
+        "label_studio.laser_project_ids",
+        required=True,
+        cast=lambda v: [int(x) for x in v],
+        default=[],
+    ),
 ]
 
 settings = Dynaconf(

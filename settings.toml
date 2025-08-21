@@ -1,3 +1,7 @@
 [temporal]
 host = "localhost"
 port = "7233"
+
+[label_studio]
+host = 'labeler.e4e.ucsd.edu'
+laser_project_ids = [43, 42]
