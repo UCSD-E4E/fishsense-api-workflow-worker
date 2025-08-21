@@ -7,3 +7,10 @@ requires-python = ">=3.12"
 dependencies = [
     "temporalio>=1.15.0",
 ]
+
+[project.scripts]
+fishsense_api_workflow_worker = "fishsense_api_workflow_worker.worker:run"
+
+[build-system]
+requires = ["uv_build>=0.8.12,<0.9.0"]
+build-backend = "uv_build"

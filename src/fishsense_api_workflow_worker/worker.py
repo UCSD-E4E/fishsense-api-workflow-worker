@@ -1,3 +1,4 @@
+import asyncio
 from datetime import timedelta
 
 from temporalio.client import (
@@ -49,3 +50,7 @@ async def main():
 
     await schedule_tasks(client)
     await worker_task
+
+
+def run():
+    asyncio.run(main())
