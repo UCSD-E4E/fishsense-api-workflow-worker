@@ -40,10 +40,11 @@ wheels = [
 
 [[package]]
 name = "fishsense-api-workflow-worker"
-version = "0.1.0"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "dynaconf" },
+    { name = "platformdirs" },
     { name = "temporalio" },
     { name = "validators" },
 ]
@@ -56,6 +57,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dynaconf", specifier = ">=3.2.11" },
+    { name = "platformdirs", specifier = ">=4.3.8" },
     { name = "temporalio", specifier = ">=1.15.0" },
     { name = "validators", specifier = ">=0.35.0" },
 ]

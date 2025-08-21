@@ -1,6 +1,7 @@
 """Worker for FishSense API Workflow"""
 
 import asyncio
+import logging
 from datetime import timedelta
 
 from temporalio.client import (
@@ -13,7 +14,7 @@ from temporalio.client import (
 )
 from temporalio.worker import Worker
 
-from fishsense_api_workflow_worker.config import settings
+from fishsense_api_workflow_worker.config import configure_logging, settings
 from fishsense_api_workflow_worker.workflows.read_label_studio_laser_labels import (
     ReadLabelStudioLaserLabelsWorkflow,
 )
@@ -44,6 +45,9 @@ async def schedule_tasks(client: Client):
 async def main():
     """Main entry point for the worker."""
 
+    configure_logging()
+    log = logging.getLogger()
+
     client = await Client.connect(f"{settings.temporal.host}:{settings.temporal.port}")
 
     worker = Worker(
@@ -54,6 +58,7 @@ async def main():
     )
 
     worker_task = worker.run()
+    log.info("Worker started, scheduling tasks...")
 
     await schedule_tasks(client)
     await worker_task
