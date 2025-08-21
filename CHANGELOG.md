@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.1 (2025-08-21)
+
+### Bug Fixes
+
+- Add missing sql scripts
+  ([`9180389`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/918038931c2deaa4950ff9d3921047643a63e730))
+
+
 ## v1.2.0 (2025-08-21)
 
 ### Features
