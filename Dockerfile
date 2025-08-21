@@ -29,6 +29,6 @@ RUN apt-get update \
 RUN mkdir -p /e4efs/config /e4efs/logs /e4efs/data /e4efs/cache
 
 COPY --from=builder /app/.venv /app/.venv
-COPY sql sql
+COPY sql /app/sql
 
 ENTRYPOINT [ "fishsense_api_workflow_worker" ]
