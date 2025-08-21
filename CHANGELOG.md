@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.2 (2025-08-21)
+
+### Bug Fixes
+
+- Sql path issue in docker container
+  ([`016fba7`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/016fba7cf9e5534f3a5d81dbd9df1ab0abdc7a11))
+
+
 ## v1.2.1 (2025-08-21)
 
 ### Bug Fixes
