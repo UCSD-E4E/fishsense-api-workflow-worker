@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v1.2.3 (2025-08-21)
+
+### Bug Fixes
+
+- Pylint error
+  ([`fcfad9b`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/fcfad9bafd15e3ebe1cfe9ecd2d83512df93c945))
+
+- Use the full path if running in docker
+  ([`b688b07`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/b688b0709e636f2a72c72dc3ef77e52d2558cad9))
+
+
 ## v1.2.2 (2025-08-21)
 
 ### Bug Fixes
