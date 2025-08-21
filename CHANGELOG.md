@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.2.4 (2025-08-21)
+
+### Bug Fixes
+
+- Sql file name
+  ([`3ec1a34`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/3ec1a34609e6a7c485278b0bf69e1c6e2a4fc102))
+
+
 ## v1.2.3 (2025-08-21)
 
 ### Bug Fixes
