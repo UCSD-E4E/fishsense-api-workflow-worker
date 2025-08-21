@@ -2,8 +2,11 @@
 
 import logging
 from datetime import timedelta
+from typing import List
 
 from temporalio import workflow
+
+from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 
 
 @workflow.defn
@@ -29,8 +32,14 @@ class ReadLabelStudioLaserLabelsWorkflow:
             laser_project_id,
         )
 
-        return await workflow.execute_activity(
+        laser_labels: List[LaserLabel] = await workflow.execute_activity(
             "read_label_studio_laser_labels",
             args=(label_studio_host, label_studio_api_key, laser_project_id),
+            schedule_to_close_timeout=timedelta(minutes=10),
+        )
+
+        await workflow.execute_activity(
+            "insert_laser_labels_into_postgres",
+            args=(laser_labels,),
             schedule_to_close_timeout=timedelta(minutes=10),
         )

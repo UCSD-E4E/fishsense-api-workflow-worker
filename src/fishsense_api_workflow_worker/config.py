@@ -51,6 +51,10 @@ validators = [
         cast=lambda v: [int(x) for x in v],
         default=[],
     ),
+    Validator("postgres.host", required=True, cast=str, condition=validators.hostname),
+    Validator("postgres.port", required=True, cast=int, default=5432),
+    Validator("postgres.username", required=True, cast=str),
+    Validator("postgres.password", required=True, cast=str),
 ]
 
 settings = Dynaconf(
@@ -62,6 +66,12 @@ settings = Dynaconf(
     ],
     merge_enabled=True,
     validators=validators,
+)
+
+PG_CONN_STR = (
+    f"postgres://{settings.postgres.username}:{settings.postgres.password}@"
+    f"{settings.postgres.host}:{settings.postgres.port}/"
+    f"{settings.postgres.database}"
 )
 
 

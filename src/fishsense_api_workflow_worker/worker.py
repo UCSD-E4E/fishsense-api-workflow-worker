@@ -14,6 +14,9 @@ from temporalio.client import (
 )
 from temporalio.worker import Worker
 
+from fishsense_api_workflow_worker.activities.insert_laser_labels_into_postgres import (
+    insert_laser_labels_into_postgres,
+)
 from fishsense_api_workflow_worker.activities.read_label_studio_laser_labels import (
     read_label_studio_laser_labels,
 )
@@ -28,7 +31,12 @@ TASK_QUEUE_NAME = "fishsense_api_queue"
 async def schedule_exists(client: Client, schedule_id: str) -> bool:
     """Check if a schedule exists."""
     schedules = await client.list_schedules()
-    return any(s.id == schedule_id for s in schedules)
+    async for s in schedules:
+        if s.id == schedule_id:
+            return True
+
+    # If we reach here, no schedule with the given ID was found
+    logging.info("No schedule found with ID: %s", schedule_id)
 
 
 async def schedule_tasks(client: Client):
@@ -55,7 +63,7 @@ async def schedule_tasks(client: Client):
                     task_queue=TASK_QUEUE_NAME,
                 ),
                 spec=ScheduleSpec(
-                    intervals=[ScheduleIntervalSpec(every=timedelta(seconds=5))]
+                    intervals=[ScheduleIntervalSpec(every=timedelta(hours=1))]
                 ),
                 state=ScheduleState(),
             ),
@@ -74,7 +82,7 @@ async def main():
         client,
         task_queue=TASK_QUEUE_NAME,
         workflows=[ReadLabelStudioLaserLabelsWorkflow],
-        activities=[read_label_studio_laser_labels],
+        activities=[insert_laser_labels_into_postgres, read_label_studio_laser_labels],
     )
 
     worker_task = worker.run()
