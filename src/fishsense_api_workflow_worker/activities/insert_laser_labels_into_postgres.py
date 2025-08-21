@@ -22,7 +22,7 @@ async def insert_laser_labels_into_postgres(labels: List[LaserLabel]):
                 return
 
             do_query(
-                path="sql/update_laser_label.sql",
+                path="sql/update_laser_by_cksum.sql",
                 cur=cur,
                 params={"cksum": label.checksum, "x": label.x, "y": label.y},
             )
