@@ -266,3 +266,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,visualstudiocode,python
+
+# Ignore dynaconf secret files
+.secrets.*

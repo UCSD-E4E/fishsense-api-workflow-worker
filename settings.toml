@@ -1,0 +1,3 @@
+[temporal]
+host = "localhost"
+port = "7233"

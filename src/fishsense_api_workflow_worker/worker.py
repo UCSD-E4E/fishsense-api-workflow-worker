@@ -11,6 +11,7 @@ from temporalio.client import (
 )
 from temporalio.worker import Worker
 
+from fishsense_api_workflow_worker.config import settings
 from fishsense_api_workflow_worker.workflows.read_label_studio_labels import (
     ReadLabelStudioLabelsWorkflow,
 )
@@ -37,7 +38,7 @@ async def schedule_tasks(client: Client):
 
 
 async def main():
-    client = await Client.connect("localhost:7233")
+    client = await Client.connect(f"{settings.temporal.host}:{settings.temporal.port}")
 
     worker = Worker(
         client,
