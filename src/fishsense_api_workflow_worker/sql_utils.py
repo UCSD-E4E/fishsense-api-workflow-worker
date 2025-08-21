@@ -6,6 +6,8 @@ from typing import Any, Dict, List, Optional, Union
 
 import psycopg
 
+from fishsense_api_workflow_worker.config import IS_DOCKER
+
 # from fishsense_data_processing_spider.metrics import get_summary
 
 __log = logging.getLogger("sql_utils")
@@ -20,6 +22,11 @@ def load_query(path: Path) -> str:
     Returns:
         str: Query contents
     """
+
+    if IS_DOCKER and not path.is_absolute():
+        # If running in Docker, we need to resolve the path relative to the container's working directory
+        path = Path("/app") / path
+
     with open(path, "r", encoding="utf-8") as handle:
         return handle.read(int(1e9))
 
