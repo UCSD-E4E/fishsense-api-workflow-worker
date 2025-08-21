@@ -2,6 +2,20 @@
 
 <!-- version list -->
 
+## v1.2.0 (2025-08-21)
+
+### Features
+
+- Implement label studio laser activity
+  ([`92f57f9`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/92f57f9d7f54e02a8080f01d4b648d28b84132b8))
+
+- Introduce logging
+  ([`f527c18`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/f527c18b7a6f0dd3911eee57e5075eecc229b1cf))
+
+- Write to postgres
+  ([`0b40ed0`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/0b40ed0219e73a313d10332c2ff211efd4d54073))
+
+
 ## v1.1.0 (2025-08-21)
 
 ### Features
