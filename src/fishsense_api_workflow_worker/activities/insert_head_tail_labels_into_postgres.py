@@ -13,6 +13,7 @@ from fishsense_api_workflow_worker.sql_utils import do_query
 
 @activity.defn
 async def insert_head_tail_labels_into_postgres(labels: List[HeadTailLabel]):
+    # pylint: disable=duplicate-code
     """Activity to insert head-tail labels into PostgreSQL database."""
 
     with psycopg.connect(PG_CONN_STR, row_factory=dict_row) as con, con.cursor() as cur:
