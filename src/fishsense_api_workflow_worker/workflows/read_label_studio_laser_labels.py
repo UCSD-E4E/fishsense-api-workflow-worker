@@ -33,7 +33,7 @@ class ReadLabelStudioLaserLabelsWorkflow:
         )
 
         laser_labels: List[LaserLabel] = await workflow.execute_activity(
-            "read_label_studio_laser_labels",
+            "collect_label_studio_laser_labels",
             args=(label_studio_host, label_studio_api_key, laser_project_id),
             schedule_to_close_timeout=timedelta(minutes=10),
         )
