@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.3.1 (2025-08-22)
+
+### Bug Fixes
+
+- Label studio percentages are in whole numbers.
+  ([`349f5d2`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/349f5d28cf52cbcae80de4af5c1a4749914aec5a))
+
+
 ## v1.3.0 (2025-08-22)
 
 ### Bug Fixes
