@@ -38,4 +38,8 @@ class ReadLabelStudioHeadTailLabelsWorkflow:
             schedule_to_close_timeout=timedelta(minutes=10),
         )
 
-        return head_tail_labels
+        await workflow.execute_activity(
+            "insert_head_tail_labels_into_postgres",
+            args=(head_tail_labels,),
+            schedule_to_close_timeout=timedelta(minutes=10),
+        )
