@@ -2,6 +2,27 @@
 
 <!-- version list -->
 
+## v1.3.0 (2025-08-22)
+
+### Bug Fixes
+
+- Pylint
+  ([`841613c`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/841613ccde2c34272746b3d34118b88b49696fb3))
+
+### Chores
+
+- Fix pylint
+  ([`ab068ea`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/ab068ea656c777e8c3ea9357c2001a850da727e3))
+
+### Features
+
+- Collect head tail labels from label studio
+  ([`51d6037`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/51d6037df33075ff0bb8c2085574d47a0e464241))
+
+- Insert headtail labels into postgres
+  ([`c1d52f3`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/c1d52f33cdec5010c6bb2ed1e20b0a7c2e68e6da))
+
+
 ## v1.2.4 (2025-08-21)
 
 ### Bug Fixes
