@@ -13,6 +13,8 @@ from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 async def collect_label_studio_laser_labels(
     label_studio_host: str, label_studio_api_key: str, laser_project_id: int
 ) -> List[LaserLabel]:
+    # pylint: disable=duplicate-code
+
     """Activity to collect labels from Label Studio."""
 
     log = logging.getLogger("read_label_studio_labels")

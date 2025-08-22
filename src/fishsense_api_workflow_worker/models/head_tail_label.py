@@ -1,3 +1,5 @@
+"""This module defines the HeadTailLabel model, which represents a head-tail label"""
+
 import logging
 from typing import Any
 from urllib.parse import urlparse
@@ -6,6 +8,8 @@ from pydantic import BaseModel
 
 
 class HeadTailLabel(BaseModel):
+    """Model representing a head-tail label from Label Studio."""
+
     task_id: int
     checksum: str
     head_x: int

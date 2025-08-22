@@ -1,3 +1,5 @@
+"""Collects head-tail labels from Label Studio."""
+
 import logging
 from typing import List
 
@@ -11,6 +13,8 @@ from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 async def collect_label_studio_head_tail_labels(
     label_studio_host: str, label_studio_api_key: str, head_tail_project_id: int
 ) -> List[HeadTailLabel]:
+    # pylint: disable=duplicate-code
+
     """Activity to collect head-tail labels from Label Studio."""
 
     log = logging.getLogger("collect_label_studio_head_tail_labels")
