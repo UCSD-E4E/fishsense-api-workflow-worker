@@ -48,8 +48,14 @@ class LaserLabel(BaseModel):
             "Parsed original height and width: %s, %s", original_width, original_height
         )
 
-        x = int(round(task.annotations[0]["result"][0]["value"]["x"] * original_width))
-        y = int(round(task.annotations[0]["result"][0]["value"]["y"] * original_height))
+        x = int(
+            round(task.annotations[0]["result"][0]["value"]["x"] * original_width / 100)
+        )
+        y = int(
+            round(
+                task.annotations[0]["result"][0]["value"]["y"] * original_height / 100
+            )
+        )
 
         log.debug("Parsed coordinates: x=%s, y=%s", x, y)
 

@@ -58,8 +58,8 @@ class HeadTailLabel(BaseModel):
             "Parsed original height and width: %s, %s", original_width, original_height
         )
 
-        x = int(round(label_value["value"]["x"] * original_width))
-        y = int(round(label_value["value"]["y"] * original_height))
+        x = int(round(label_value["value"]["x"] * original_width / 100))
+        y = int(round(label_value["value"]["y"] * original_height / 100))
 
         log.debug("Parsed coordinates: x=%s, y=%s", x, y)
 
