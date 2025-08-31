@@ -1,0 +1,9 @@
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.develop
+    command: tail -f /dev/null
+    volumes:
+      - .:/app
+    restart: none
