@@ -16,7 +16,8 @@
                 "VisualStudioExptTeam.vscodeintellicode",
                 "ms-python.black-formatter",
                 "ms-vscode-remote.remote-containers",
-                "ms-azuretools.vscode-containers"
+                "ms-azuretools.vscode-containers",
+                "ms-ossdata.vscode-pgsql"
             ]
         }
     }
