@@ -3,6 +3,7 @@
     "dockerComposeFile": "../docker-compose.develop.yml",
     "service": "worker",
     "workspaceFolder": "/app",
+    "postCreateCommand": "uv sync",
     "shutdownAction": "stopCompose",
     "customizations": {
         "vscode": {
