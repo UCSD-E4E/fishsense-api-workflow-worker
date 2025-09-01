@@ -14,6 +14,7 @@ from temporalio.client import (
 )
 from temporalio.worker import Worker
 
+from fishsense_api_workflow_worker.database import Database
 from fishsense_api_workflow_worker.activities.collect_label_studio_head_tail_labels import (
     collect_label_studio_head_tail_labels,
 )
@@ -123,6 +124,9 @@ async def main():
 
     configure_logging()
     log = logging.getLogger()
+
+    database = Database()
+    await database.init_database()
 
     client = await Client.connect(f"{settings.temporal.host}:{settings.temporal.port}")
 
