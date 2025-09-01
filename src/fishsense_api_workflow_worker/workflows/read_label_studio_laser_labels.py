@@ -26,20 +26,20 @@ class ReadLabelStudioLaserLabelsWorkflow:
     ):
         """Run the workflow to read laser labels."""
 
-        self.__log.debug("Label Studio server location: %s", label_studio_host)
-        self.__log.info(
-            "Preparing to read laser labels from Label Studio project: %s",
-            laser_project_id,
-        )
+        # self.__log.debug("Label Studio server location: %s", label_studio_host)
+        # self.__log.info(
+        #     "Preparing to read laser labels from Label Studio project: %s",
+        #     laser_project_id,
+        # )
 
-        laser_labels: List[LaserLabel] = await workflow.execute_activity(
-            "collect_label_studio_laser_labels",
-            args=(label_studio_host, label_studio_api_key, laser_project_id),
-            schedule_to_close_timeout=timedelta(minutes=10),
-        )
+        # laser_labels: List[LaserLabel] = await workflow.execute_activity(
+        #     "collect_label_studio_laser_labels",
+        #     args=(label_studio_host, label_studio_api_key, laser_project_id),
+        #     schedule_to_close_timeout=timedelta(minutes=10),
+        # )
 
-        await workflow.execute_activity(
-            "insert_laser_labels_into_postgres",
-            args=(laser_labels,),
-            schedule_to_close_timeout=timedelta(minutes=10),
-        )
+        # await workflow.execute_activity(
+        #     "insert_laser_labels_into_postgres",
+        #     args=(laser_labels,),
+        #     schedule_to_close_timeout=timedelta(minutes=10),
+        # )

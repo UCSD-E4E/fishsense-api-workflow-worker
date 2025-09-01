@@ -12,3 +12,4 @@ class Image(SQLModel, table=True):
     is_canonical: bool = Field(default=False)
 
     dive_id: int | None = Field(default=None, foreign_key="dive.id")
+    camera_id: int | None = Field(default=None, foreign_key="camera.id")

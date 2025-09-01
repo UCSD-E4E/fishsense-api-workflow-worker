@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import asyncio
+from typing import Iterable
 
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlmodel import SQLModel, select
+from sqlmodel import SQLModel, select, and_
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from fishsense_api_workflow_worker.config import settings
+from fishsense_api_workflow_worker.models.camera import Camera
 from fishsense_api_workflow_worker.models.dive import Dive
 from fishsense_api_workflow_worker.models.image import Image
 
@@ -25,6 +26,12 @@ class Database:
         async with self.engine.begin() as conn:
             await conn.run_sync(SQLModel.metadata.create_all)
 
+    async def insert_camera(self, camera: Camera):
+        async with AsyncSession(self.engine) as session:
+            session.add(camera)
+
+            await session.commit()
+
     async def insert_dive(self, dive: Dive):
         async with AsyncSession(self.engine) as session:
             session.add(dive)
@@ -36,6 +43,14 @@ class Database:
             session.add(image)
 
             await session.commit()
+
+    async def select_camera_by_serial_number(self, serial_number: str) -> Camera | None:
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(
+                select(Camera).where(Camera.serial_number == serial_number)
+            )
+
+        return result.one_or_none()
 
     async def select_dive_by_id(self, dive_id: int) -> Dive | None:
         async with AsyncSession(self.engine) as session:
@@ -49,6 +64,12 @@ class Database:
 
         return result.one_or_none()
 
+    async def select_dives(self) -> Iterable[Dive]:
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(select(Dive).order_by(Dive.dive_datetime))
+
+        return result.all()
+
     async def select_image_by_id(self, image_id: int) -> Image | None:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(Image).where(Image.id == image_id))
@@ -59,7 +80,7 @@ class Database:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
                 select(Image).where(
-                    Image.checksum == image_checksum and Image.is_canonical == True
+                    and_(Image.checksum == image_checksum, Image.is_canonical == True)
                 )
             )
 
@@ -69,12 +90,14 @@ class Database:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
                 select(Image).where(
-                    Image.dive_id == dive.id and Image.is_canonical == True
+                    and_(Image.dive_id == dive.id, Image.is_canonical == True)
                 )
             )
 
         return result.one_or_none()
 
+    async def select_image_by_path(self, path: str) -> Image | None:
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(select(Image).where(Image.path == path))
 
-__database = Database()
-asyncio.run(__database.init_database())
+        return result.one_or_none()
