@@ -36,15 +36,6 @@ class LaserLabel(SQLModel, table=True):
         )
 
     @staticmethod
-    def __parse_checksum(task: Any) -> str:
-        log = logging.getLogger("LaserLabel")
-        checksum = urlparse(task.data["img"]).path.split("/")[-1]
-
-        log.debug("Parsed checksum: %s", checksum)
-
-        return checksum
-
-    @staticmethod
     def __parse_x_y(task: Any) -> tuple[int, int]:
         log = logging.getLogger("LaserLabel")
         original_width = task.annotations[0]["result"][0]["original_width"]

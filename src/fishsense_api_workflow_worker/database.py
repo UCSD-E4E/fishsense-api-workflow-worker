@@ -9,6 +9,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from fishsense_api_workflow_worker.config import settings
 from fishsense_api_workflow_worker.models.camera import Camera
 from fishsense_api_workflow_worker.models.dive import Dive
+from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 from fishsense_api_workflow_worker.models.image import Image
 from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 
@@ -49,6 +50,17 @@ class Database:
 
                 await session.commit()
 
+    async def insert_or_update_head_tail_label(
+        self, head_tail_label: HeadTailLabel, session: AsyncSession | None = None
+    ):
+        if session is not None:
+            session.add(head_tail_label)
+        else:
+            async with AsyncSession(self.engine) as session:
+                session.add(head_tail_label)
+
+                await session.commit()
+
     async def insert_or_update_image(
         self, image: Image, session: AsyncSession | None = None
     ):
@@ -79,12 +91,6 @@ class Database:
 
         return result.one_or_none()
 
-    async def select_dive_by_id(self, dive_id: int) -> Dive | None:
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(Dive).where(Dive.id == dive_id))
-
-        return result.one_or_none()
-
     async def select_dive_by_path(self, dive_path: str) -> Dive | None:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(Dive).where(Dive.path == dive_path))
@@ -97,9 +103,11 @@ class Database:
 
         return result.all()
 
-    async def select_image_by_id(self, image_id: int) -> Image | None:
+    async def select_head_tail_labels_by_task_id(self, task_id: int) -> HeadTailLabel | None:
         async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(Image).where(Image.id == image_id))
+            result = await session.exec(
+                select(HeadTailLabel).where(HeadTailLabel.label_studio_task_id == task_id)
+            )
 
         return result.one_or_none()
 
@@ -108,16 +116,6 @@ class Database:
             result = await session.exec(
                 select(Image).where(
                     and_(Image.checksum == image_checksum, Image.is_canonical == True)
-                )
-            )
-
-        return result.one_or_none()
-
-    async def select_image_by_dive(self, dive: Dive) -> Image | None:
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(
-                select(Image).where(
-                    and_(Image.dive_id == dive.id, Image.is_canonical == True)
                 )
             )
 
