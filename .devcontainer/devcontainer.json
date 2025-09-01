@@ -5,6 +5,7 @@
     "workspaceFolder": "/app",
     "postCreateCommand": "uv sync",
     "shutdownAction": "stopCompose",
+    "forwardPorts": [5432],
     "customizations": {
         "vscode": {
             "extensions": [
