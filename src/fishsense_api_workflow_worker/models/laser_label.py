@@ -4,29 +4,35 @@ import logging
 from typing import Any
 from urllib.parse import urlparse
 
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
 
-class LaserLabel(BaseModel):
+class LaserLabel(SQLModel, table=True):
     """Model representing a laser label from Label Studio."""
 
-    task_id: int
-    checksum: str
-    x: int
-    y: int
+    id: int | None = Field(default=None, primary_key=True)
+    label_studio_task_id: int | None = Field(default=None, unique=True, index=True)
+    x: int | None = Field(default=None)
+    y: int | None = Field(default=None)
+    label: str | None = Field(default=None)
+
+    image_id: int | None = Field(default=None, foreign_key="image.id")
 
     @classmethod
-    def from_task(cls, task: Any) -> "LaserLabel":
+    async def from_task(cls, task: Any) -> "LaserLabel":
         """Create a LaserLabel instance from a Label Studio task."""
 
         log = logging.getLogger("LaserLabel")
         log.debug("Initializing LaserLabel with task ID: %s", task.id)
 
+        checksum = cls.__parse_checksum(task)
+
         return cls(
-            task_id=task.id,
-            checksum=cls.__parse_checksum(task),
+            checksum,
+            label_studio_task_id=task.id,
             x=cls.__parse_x_y(task)[0],
             y=cls.__parse_x_y(task)[1],
+            label=cls.__parse_label(task),
         )
 
     @staticmethod
@@ -60,3 +66,12 @@ class LaserLabel(BaseModel):
         log.debug("Parsed coordinates: x=%s, y=%s", x, y)
 
         return x, y
+
+    @staticmethod
+    def __parse_label(task: Any) -> str:
+        log = logging.getLogger("LaserLabel")
+        label = task.annotations[0]["result"][0]["value"]["keypointlabels"][0]
+
+        log.debug("Parsed label: %s", label)
+
+        return label

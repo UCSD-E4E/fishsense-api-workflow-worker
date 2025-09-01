@@ -1,11 +1,10 @@
 from datetime import datetime
-from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
 
 class Image(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     path: str = Field(max_length=255, unique=True, index=True)
     taken_datetime: datetime = Field(default=None)
     checksum: str = Field(max_length=32, index=True)

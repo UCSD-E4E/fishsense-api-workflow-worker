@@ -3,13 +3,14 @@ from __future__ import annotations
 from typing import Iterable
 
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlmodel import SQLModel, select, and_
+from sqlmodel import SQLModel, and_, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from fishsense_api_workflow_worker.config import settings
 from fishsense_api_workflow_worker.models.camera import Camera
 from fishsense_api_workflow_worker.models.dive import Dive
 from fishsense_api_workflow_worker.models.image import Image
+from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 
 
 class Database:
@@ -26,23 +27,49 @@ class Database:
         async with self.engine.begin() as conn:
             await conn.run_sync(SQLModel.metadata.create_all)
 
-    async def insert_camera(self, camera: Camera):
-        async with AsyncSession(self.engine) as session:
+    async def insert_or_update_camera(
+        self, camera: Camera, session: AsyncSession | None = None
+    ):
+        if session is not None:
             session.add(camera)
+        else:
+            async with AsyncSession(self.engine) as session:
+                session.add(camera)
 
-            await session.commit()
+                await session.commit()
 
-    async def insert_dive(self, dive: Dive):
-        async with AsyncSession(self.engine) as session:
+    async def insert_or_update_dive(
+        self, dive: Dive, session: AsyncSession | None = None
+    ):
+        if session is not None:
             session.add(dive)
+        else:
+            async with AsyncSession(self.engine) as session:
+                session.add(dive)
 
-            await session.commit()
+                await session.commit()
 
-    async def insert_image(self, image: Image):
-        async with AsyncSession(self.engine) as session:
+    async def insert_or_update_image(
+        self, image: Image, session: AsyncSession | None = None
+    ):
+        if session is not None:
             session.add(image)
+        else:
+            async with AsyncSession(self.engine) as session:
+                session.add(image)
 
-            await session.commit()
+                await session.commit()
+
+    async def insert_or_update_laser_label(
+        self, laser_label: LaserLabel, session: AsyncSession | None = None
+    ):
+        if session is not None:
+            session.add(laser_label)
+        else:
+            async with AsyncSession(self.engine) as session:
+                session.add(laser_label)
+
+                await session.commit()
 
     async def select_camera_by_serial_number(self, serial_number: str) -> Camera | None:
         async with AsyncSession(self.engine) as session:
@@ -99,5 +126,13 @@ class Database:
     async def select_image_by_path(self, path: str) -> Image | None:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(Image).where(Image.path == path))
+
+        return result.one_or_none()
+
+    async def select_laser_label_by_task_id(self, task_id: int) -> LaserLabel | None:
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(
+                select(LaserLabel).where(LaserLabel.label_studio_task_id == task_id)
+            )
 
         return result.one_or_none()
