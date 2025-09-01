@@ -64,12 +64,6 @@ settings = Dynaconf(
     validators=validators,
 )
 
-PG_CONN_STR = (
-    f"postgres://{settings.postgres.username}:{settings.postgres.password}@"
-    f"{settings.postgres.host}:{settings.postgres.port}/"
-    f"{settings.postgres.database}"
-)
-
 
 def configure_log_handler(handler: logging.Handler):
     """Configures the log handler with standard formatting

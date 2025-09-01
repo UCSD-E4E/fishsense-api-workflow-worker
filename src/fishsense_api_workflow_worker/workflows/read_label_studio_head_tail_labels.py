@@ -26,20 +26,20 @@ class ReadLabelStudioHeadTailLabelsWorkflow:
     ):
         """Run the workflow to read head-tail labels."""
 
-        # self.__log.debug("Label Studio server location: %s", label_studio_host)
-        # self.__log.info(
-        #     "Preparing to read head-tail labels from Label Studio project: %s",
-        #     head_tail_project_id,
-        # )
+        self.__log.debug("Label Studio server location: %s", label_studio_host)
+        self.__log.info(
+            "Preparing to read head-tail labels from Label Studio project: %s",
+            head_tail_project_id,
+        )
 
-        # head_tail_labels: List[HeadTailLabel] = await workflow.execute_activity(
-        #     "collect_label_studio_head_tail_labels",
-        #     args=(label_studio_host, label_studio_api_key, head_tail_project_id),
-        #     schedule_to_close_timeout=timedelta(minutes=10),
-        # )
+        head_tail_labels: List[HeadTailLabel] = await workflow.execute_activity(
+            "collect_label_studio_head_tail_labels",
+            args=(label_studio_host, label_studio_api_key, head_tail_project_id),
+            schedule_to_close_timeout=timedelta(minutes=10),
+        )
 
-        # await workflow.execute_activity(
-        #     "insert_head_tail_labels_into_postgres",
-        #     args=(head_tail_labels,),
-        #     schedule_to_close_timeout=timedelta(minutes=10),
-        # )
+        await workflow.execute_activity(
+            "insert_head_tail_labels_into_postgres",
+            args=(head_tail_labels,),
+            schedule_to_close_timeout=timedelta(minutes=10),
+        )
