@@ -17,7 +17,7 @@ class User(SQLModel, table=True):
     date_joined: datetime = Field(default=None)
 
     @classmethod
-    async def from_label_studio(cls, user: LseUserApi) -> "User":
+    def from_label_studio(cls, user: LseUserApi) -> "User":
         """Create a User instance from a Label Studio user."""
 
         return cls(

@@ -9,7 +9,7 @@ from fishsense_api_workflow_worker.models.user import User
 
 
 @activity.defn
-async def collect_label_studio_users(
+def collect_label_studio_users(
     label_studio_host: str, label_studio_api_key: str
 ) -> List[User]:
     """Activity to collect users from Label Studio."""
