@@ -29,6 +29,8 @@ async def collect_label_studio_head_tail_labels(
         base_url=f"https://{label_studio_host}", api_key=label_studio_api_key
     )
 
+    database = Database()
+    
     labels: List[HeadTailLabel] = []
     for task in client.tasks.list(project=head_tail_project_id):
         if activity.is_cancelled():
@@ -52,7 +54,6 @@ async def collect_label_studio_head_tail_labels(
             )
             continue
 
-        database = Database()
         existing_labels = await database.select_head_tail_labels_by_task_id(task.id)
 
         user = await database.select_user_by_email(

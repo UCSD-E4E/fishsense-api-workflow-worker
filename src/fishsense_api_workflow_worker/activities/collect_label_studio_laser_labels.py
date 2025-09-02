@@ -26,6 +26,8 @@ async def collect_label_studio_laser_labels(
         base_url=f"https://{label_studio_host}", api_key=label_studio_api_key
     )
 
+    database = Database()
+
     labels: List[LaserLabel] = []
     for task in client.tasks.list(project=laser_project_id):
         if activity.is_cancelled():
@@ -35,7 +37,6 @@ async def collect_label_studio_laser_labels(
         if not task.annotations or not task.annotations[0]["result"]:
             continue
 
-        database = Database()
         existing_labels = await database.select_laser_label_by_task_id(task.id)
 
         user = await database.select_user_by_email(
