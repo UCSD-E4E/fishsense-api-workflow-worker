@@ -2,7 +2,6 @@
 
 import logging
 from typing import Any
-from urllib.parse import urlparse
 
 from sqlmodel import Field, SQLModel
 
@@ -16,7 +15,9 @@ class HeadTailLabel(SQLModel, table=True):
     head_y: int | None = Field(default=None)
     tail_x: int | None = Field(default=None)
     tail_y: int | None = Field(default=None)
+
     image_id: int | None = Field(default=None, foreign_key="image.id")
+    user_id: int | None = Field(default=None, foreign_key="user.id")
 
     @classmethod
     def from_task(cls, task: Any) -> "HeadTailLabel":

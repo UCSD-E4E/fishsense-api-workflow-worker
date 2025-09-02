@@ -2,7 +2,6 @@
 
 import logging
 from typing import Any
-from urllib.parse import urlparse
 
 from sqlmodel import Field, SQLModel
 
@@ -17,6 +16,7 @@ class LaserLabel(SQLModel, table=True):
     label: str | None = Field(default=None)
 
     image_id: int | None = Field(default=None, foreign_key="image.id")
+    user_id: int | None = Field(default=None, foreign_key="user.id")
 
     @classmethod
     async def from_task(cls, task: Any) -> "LaserLabel":

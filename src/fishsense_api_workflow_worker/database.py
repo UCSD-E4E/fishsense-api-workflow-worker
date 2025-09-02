@@ -12,6 +12,7 @@ from fishsense_api_workflow_worker.models.dive import Dive
 from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 from fishsense_api_workflow_worker.models.image import Image
 from fishsense_api_workflow_worker.models.laser_label import LaserLabel
+from fishsense_api_workflow_worker.models.user import User
 
 
 class Database:
@@ -83,6 +84,17 @@ class Database:
 
                 await session.commit()
 
+    async def insert_or_update_user(
+        self, user: User, session: AsyncSession | None = None
+    ):
+        if session is not None:
+            session.add(user)
+        else:
+            async with AsyncSession(self.engine) as session:
+                session.add(user)
+
+                await session.commit()
+
     async def select_camera_by_serial_number(self, serial_number: str) -> Camera | None:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
@@ -103,10 +115,14 @@ class Database:
 
         return result.all()
 
-    async def select_head_tail_labels_by_task_id(self, task_id: int) -> HeadTailLabel | None:
+    async def select_head_tail_labels_by_task_id(
+        self, task_id: int
+    ) -> HeadTailLabel | None:
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
-                select(HeadTailLabel).where(HeadTailLabel.label_studio_task_id == task_id)
+                select(HeadTailLabel).where(
+                    HeadTailLabel.label_studio_task_id == task_id
+                )
             )
 
         return result.one_or_none()
@@ -132,5 +148,11 @@ class Database:
             result = await session.exec(
                 select(LaserLabel).where(LaserLabel.label_studio_task_id == task_id)
             )
+
+        return result.one_or_none()
+
+    async def select_user_by_email(self, email: str) -> User | None:
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(select(User).where(User.email == email))
 
         return result.one_or_none()
