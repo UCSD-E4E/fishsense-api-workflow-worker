@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.4.1 (2025-09-02)
+
+### Bug Fixes
+
+- Add executor for sync activities
+  ([`11ec9b9`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/11ec9b9bbdb3b7d3ff487f89ede2074d1b25424c))
+
+
 ## v1.4.0 (2025-09-02)
 
 ### Bug Fixes
