@@ -19,16 +19,13 @@ class LaserLabel(SQLModel, table=True):
     user_id: int | None = Field(default=None, foreign_key="user.id")
 
     @classmethod
-    async def from_task(cls, task: Any) -> "LaserLabel":
+    def from_task(cls, task: Any) -> "LaserLabel":
         """Create a LaserLabel instance from a Label Studio task."""
 
         log = logging.getLogger("LaserLabel")
         log.debug("Initializing LaserLabel with task ID: %s", task.id)
 
-        checksum = cls.__parse_checksum(task)
-
         return cls(
-            checksum,
             label_studio_task_id=task.id,
             x=cls.__parse_x_y(task)[0],
             y=cls.__parse_x_y(task)[1],

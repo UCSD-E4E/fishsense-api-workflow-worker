@@ -6,6 +6,7 @@ from typing import List
 from label_studio_sdk.client import LabelStudio
 from temporalio import activity
 
+from fishsense_api_workflow_worker.database import Database
 from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 
 
@@ -51,6 +52,17 @@ async def collect_label_studio_head_tail_labels(
             )
             continue
 
-        labels.append(HeadTailLabel.from_task(task))
+        database = Database()
+        existing_labels = await database.select_head_tail_labels_by_task_id(task.id)
+
+        user = await database.select_user_by_email(
+            task.annotations[0]["created_username"].split(",")[0].strip()
+        )
+
+        headtail_label = HeadTailLabel.from_task(task)
+        headtail_label.image_id = existing_labels.image_id if existing_labels else None
+        headtail_label.user_id = user.id if user else None
+
+        labels.append(headtail_label)
 
     return labels

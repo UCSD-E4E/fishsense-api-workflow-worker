@@ -6,6 +6,7 @@ from typing import List
 from label_studio_sdk.client import LabelStudio
 from temporalio import activity
 
+from fishsense_api_workflow_worker.database import Database
 from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 
 
@@ -34,6 +35,17 @@ async def collect_label_studio_laser_labels(
         if not task.annotations or not task.annotations[0]["result"]:
             continue
 
-        labels.append(LaserLabel.from_task(task))
+        database = Database()
+        existing_labels = await database.select_laser_label_by_task_id(task.id)
+
+        user = await database.select_user_by_email(
+            task.annotations[0]["created_username"].split(",")[0].strip()
+        )
+
+        laser_label = LaserLabel.from_task(task)
+        laser_label.image_id = existing_labels.image_id if existing_labels else None
+        laser_label.user_id = user.id if user else None
+
+        labels.append(laser_label)
 
     return labels
