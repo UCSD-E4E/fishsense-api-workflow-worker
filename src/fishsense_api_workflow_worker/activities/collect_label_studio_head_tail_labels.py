@@ -30,7 +30,7 @@ async def collect_label_studio_head_tail_labels(
     )
 
     database = Database()
-    
+
     labels: List[HeadTailLabel] = []
     for task in client.tasks.list(project=head_tail_project_id):
         if activity.is_cancelled():
