@@ -1,6 +1,7 @@
 """Worker for FishSense API Workflow"""
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 import logging
 from datetime import timedelta
 
@@ -28,6 +29,9 @@ from fishsense_api_workflow_worker.activities.insert_head_tail_labels_into_postg
 )
 from fishsense_api_workflow_worker.activities.insert_laser_labels_into_postgres import (
     insert_laser_labels_into_postgres,
+)
+from fishsense_api_workflow_worker.activities.insert_users_into_postgres import (
+    insert_users_into_postgres,
 )
 from fishsense_api_workflow_worker.config import configure_logging, settings
 from fishsense_api_workflow_worker.database import Database
@@ -133,27 +137,30 @@ async def main():
 
     client = await Client.connect(f"{settings.temporal.host}:{settings.temporal.port}")
 
-    worker = Worker(
-        client,
-        task_queue=TASK_QUEUE_NAME,
-        workflows=[
-            ReadLabelStudioLaserLabelsWorkflow,
-            ReadLabelStudioHeadTailLabelsWorkflow,
-        ],
-        activities=[
-            insert_laser_labels_into_postgres,
-            insert_head_tail_labels_into_postgres,
-            collect_label_studio_laser_labels,
-            collect_label_studio_head_tail_labels,
-            collect_label_studio_users,
-        ],
-    )
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        worker = Worker(
+            client,
+            task_queue=TASK_QUEUE_NAME,
+            workflows=[
+                ReadLabelStudioLaserLabelsWorkflow,
+                ReadLabelStudioHeadTailLabelsWorkflow,
+            ],
+            activity_executor=executor,
+            activities=[
+                insert_laser_labels_into_postgres,
+                insert_head_tail_labels_into_postgres,
+                insert_users_into_postgres,
+                collect_label_studio_laser_labels,
+                collect_label_studio_head_tail_labels,
+                collect_label_studio_users,
+            ],
+        )
 
-    worker_task = worker.run()
-    log.info("Worker started, scheduling workflows...")
+        worker_task = worker.run()
+        log.info("Worker started, scheduling workflows...")
 
-    await schedule_workflows(client)
-    await worker_task
+        await schedule_workflows(client)
+        await worker_task
 
 
 def run():
