@@ -2,13 +2,11 @@
 
 from typing import List
 
-import psycopg
-from psycopg.rows import dict_row
+from sqlmodel.ext.asyncio.session import AsyncSession
 from temporalio import activity
 
-from fishsense_api_workflow_worker.config import PG_CONN_STR
+from fishsense_api_workflow_worker.database import Database
 from fishsense_api_workflow_worker.models.laser_label import LaserLabel
-from fishsense_api_workflow_worker.sql_utils import do_query
 
 
 @activity.defn
@@ -16,14 +14,19 @@ async def insert_laser_labels_into_postgres(labels: List[LaserLabel]):
     # pylint: disable=duplicate-code
     """Activity to insert laser labels into PostgreSQL database."""
 
-    with psycopg.connect(PG_CONN_STR, row_factory=dict_row) as con, con.cursor() as cur:
+    database = Database()
+    async with AsyncSession(database.engine) as conn:
         for label in labels:
             if activity.is_cancelled():
-                con.rollback()
+                await conn.rollback()
                 return
 
-            do_query(
-                path="sql/update_laser_by_cksum.sql",
-                cur=cur,
-                params={"cksum": label.checksum, "x": label.x, "y": label.y},
+            existing_label = await database.select_laser_label_by_task_id(
+                label.label_studio_task_id
             )
+            if existing_label:
+                label.id = existing_label.id
+
+            await database.insert_or_update_laser_label(label, session=conn)
+
+        await conn.commit()

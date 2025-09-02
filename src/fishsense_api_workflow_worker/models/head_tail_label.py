@@ -2,20 +2,22 @@
 
 import logging
 from typing import Any
-from urllib.parse import urlparse
 
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
 
-class HeadTailLabel(BaseModel):
-    """Model representing a head-tail label from Label Studio."""
+class HeadTailLabel(SQLModel, table=True):
+    """Model representing a head-tail label."""
 
-    task_id: int
-    checksum: str
-    head_x: int
-    head_y: int
-    tail_x: int
-    tail_y: int
+    id: int | None = Field(default=None, primary_key=True)
+    label_studio_task_id: int | None = Field(default=None, unique=True, index=True)
+    head_x: int | None = Field(default=None)
+    head_y: int | None = Field(default=None)
+    tail_x: int | None = Field(default=None)
+    tail_y: int | None = Field(default=None)
+
+    image_id: int | None = Field(default=None, foreign_key="image.id")
+    user_id: int | None = Field(default=None, foreign_key="user.id")
 
     @classmethod
     def from_task(cls, task: Any) -> "HeadTailLabel":
@@ -25,22 +27,12 @@ class HeadTailLabel(BaseModel):
         log.debug("Initializing HeadTailLabel with task ID: %s", task.id)
 
         return cls(
-            task_id=task.id,
-            checksum=cls.__parse_checksum(task),
+            label_studio_task_id=task.id,
             head_x=cls.__parse_x_y(task, "Snout")[0],
             head_y=cls.__parse_x_y(task, "Snout")[1],
             tail_x=cls.__parse_x_y(task, "Fork")[0],
             tail_y=cls.__parse_x_y(task, "Fork")[1],
         )
-
-    @staticmethod
-    def __parse_checksum(task: Any) -> str:
-        log = logging.getLogger("HeadTailLabel")
-        checksum = urlparse(task.data["img"]).path.split("/")[-1]
-
-        log.debug("Parsed checksum: %s", checksum)
-
-        return checksum
 
     @staticmethod
     def __parse_x_y(task: Any, label: str) -> tuple[int, int]:

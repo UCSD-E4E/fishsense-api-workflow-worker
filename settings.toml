@@ -11,4 +11,4 @@ head_tail_project_ids = [44, 45]
 host = "postgres"
 port = 5432
 username = "postgres"
-database = "postgres"
+database = "fishsense"

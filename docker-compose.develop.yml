@@ -1,0 +1,31 @@
+services:
+  worker:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile.develop
+    command: tail -f /dev/null
+    volumes:
+      - .:/app
+    restart: none
+
+  postgres:
+    image: postgres:16.4
+    restart: always
+    shm_size: 128 mb
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin_password
+    volumes:
+      - ./pg_volumes/data/:/var/lib/postgresql/data/:rw
+      - ./pg_volumes/config/:/etc/postgresql/:ro
+      - ./pg_volumes/scripts/:/docker-entrypoint-initdb.d/:ro
+    secrets:
+      - postgres_admin_password
+    command: --config_file=/etc/postgresql/postgres.conf
+    ports:
+      - 5432:5432
+
+secrets:
+  postgres_admin_password: 
+    file: .secrets/postgres_admin_password.txt

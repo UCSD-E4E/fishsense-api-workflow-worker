@@ -7,6 +7,7 @@ from typing import List
 from temporalio import workflow
 
 from fishsense_api_workflow_worker.models.laser_label import LaserLabel
+from fishsense_api_workflow_worker.workflows.utils import sync_users
 
 
 @workflow.defn
@@ -31,6 +32,8 @@ class ReadLabelStudioLaserLabelsWorkflow:
             "Preparing to read laser labels from Label Studio project: %s",
             laser_project_id,
         )
+
+        await sync_users(label_studio_host, label_studio_api_key)
 
         laser_labels: List[LaserLabel] = await workflow.execute_activity(
             "collect_label_studio_laser_labels",

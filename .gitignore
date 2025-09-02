@@ -23,7 +23,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -269,3 +270,5 @@ $RECYCLE.BIN/
 
 # Ignore dynaconf secret files
 .secrets.*
+.secrets/
+pg_volumes/data/

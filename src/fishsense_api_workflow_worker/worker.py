@@ -20,6 +20,9 @@ from fishsense_api_workflow_worker.activities.collect_label_studio_head_tail_lab
 from fishsense_api_workflow_worker.activities.collect_label_studio_laser_labels import (
     collect_label_studio_laser_labels,
 )
+from fishsense_api_workflow_worker.activities.collect_label_studio_users import (
+    collect_label_studio_users,
+)
 from fishsense_api_workflow_worker.activities.insert_head_tail_labels_into_postgres import (
     insert_head_tail_labels_into_postgres,
 )
@@ -27,6 +30,7 @@ from fishsense_api_workflow_worker.activities.insert_laser_labels_into_postgres 
     insert_laser_labels_into_postgres,
 )
 from fishsense_api_workflow_worker.config import configure_logging, settings
+from fishsense_api_workflow_worker.database import Database
 from fishsense_api_workflow_worker.workflows.read_label_studio_head_tail_labels import (
     ReadLabelStudioHeadTailLabelsWorkflow,
 )
@@ -124,6 +128,9 @@ async def main():
     configure_logging()
     log = logging.getLogger()
 
+    database = Database()
+    await database.init_database()
+
     client = await Client.connect(f"{settings.temporal.host}:{settings.temporal.port}")
 
     worker = Worker(
@@ -138,6 +145,7 @@ async def main():
             insert_head_tail_labels_into_postgres,
             collect_label_studio_laser_labels,
             collect_label_studio_head_tail_labels,
+            collect_label_studio_users,
         ],
     )
 
