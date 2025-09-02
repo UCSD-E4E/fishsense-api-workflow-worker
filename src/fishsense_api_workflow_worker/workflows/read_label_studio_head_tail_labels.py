@@ -7,6 +7,7 @@ from typing import List
 from temporalio import workflow
 
 from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
+from fishsense_api_workflow_worker.models.user import User
 
 
 @workflow.defn
@@ -30,6 +31,18 @@ class ReadLabelStudioHeadTailLabelsWorkflow:
         self.__log.info(
             "Preparing to read head-tail labels from Label Studio project: %s",
             head_tail_project_id,
+        )
+
+        users: List[User] = await workflow.execute_activity(
+            "collect_label_studio_users",
+            args=(label_studio_host, label_studio_api_key),
+            schedule_to_close_timeout=timedelta(minutes=10),
+        )
+
+        await workflow.execute_activity(
+            "insert_users_into_postgres",
+            args=(users,),
+            schedule_to_close_timeout=timedelta(minutes=10),
         )
 
         head_tail_labels: List[HeadTailLabel] = await workflow.execute_activity(
