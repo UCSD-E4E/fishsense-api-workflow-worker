@@ -37,72 +37,72 @@ class Database:
     async def insert_or_update_camera(
         self, camera: Camera, session: AsyncSession | None = None
     ):
-        """Insert or update a camera in the database."""
+        """Insert or update (upsert) a camera in the database."""
         if session is not None:
-            session.add(camera)
+            await session.merge(camera)
         else:
             async with AsyncSession(self.engine) as session:
-                session.add(camera)
+                await session.merge(camera)
 
                 await session.commit()
 
     async def insert_or_update_dive(
         self, dive: Dive, session: AsyncSession | None = None
     ):
-        """Insert or update a dive in the database."""
+        """Insert or update (upsert) a dive in the database."""
         if session is not None:
-            session.add(dive)
+            await session.merge(dive)
         else:
             async with AsyncSession(self.engine) as session:
-                session.add(dive)
+                await session.merge(dive)
 
                 await session.commit()
 
     async def insert_or_update_head_tail_label(
         self, head_tail_label: HeadTailLabel, session: AsyncSession | None = None
     ):
-        """Insert or update a head-tail label in the database."""
+        """Insert or update (upsert) a head-tail label in the database."""
         if session is not None:
-            session.add(head_tail_label)
+            await session.merge(head_tail_label)
         else:
             async with AsyncSession(self.engine) as session:
-                session.add(head_tail_label)
+                await session.merge(head_tail_label)
 
                 await session.commit()
 
     async def insert_or_update_image(
         self, image: Image, session: AsyncSession | None = None
     ):
-        """Insert or update an image in the database."""
+        """Insert or update (upsert) an image in the database."""
         if session is not None:
-            session.add(image)
+            await session.merge(image)
         else:
             async with AsyncSession(self.engine) as session:
-                session.add(image)
+                await session.merge(image)
 
                 await session.commit()
 
     async def insert_or_update_laser_label(
         self, laser_label: LaserLabel, session: AsyncSession | None = None
     ):
-        """Insert or update a laser label in the database."""
+        """Insert or update (upsert) a laser label in the database."""
         if session is not None:
-            session.add(laser_label)
+            await session.merge(laser_label)
         else:
             async with AsyncSession(self.engine) as session:
-                session.add(laser_label)
+                await session.merge(laser_label)
 
                 await session.commit()
 
     async def insert_or_update_user(
         self, user: User, session: AsyncSession | None = None
     ):
-        """Insert or update a user in the database."""
+        """Insert or update (upsert) a user in the database."""
         if session is not None:
-            session.add(user)
+            await session.merge(user)
         else:
             async with AsyncSession(self.engine) as session:
-                session.add(user)
+                await session.merge(user)
 
                 await session.commit()
 
