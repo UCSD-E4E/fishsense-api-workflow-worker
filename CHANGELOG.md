@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.0 (2025-09-02)
+
+### Features
+
+- Add tqdm
+  ([`9e8e52b`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/9e8e52bf9e2096205a5fc0e0986529e5f5b29caa))
+
+
 ## v1.4.1 (2025-09-02)
 
 ### Bug Fixes
