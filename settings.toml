@@ -8,7 +8,7 @@ laser_project_ids = [43, 42]
 head_tail_project_ids = [44, 45]
 
 [postgres]
-host = "postgres"
+host = "fabricant-prod.ucsd.edu"
 port = 5432
 username = "postgres"
 database = "fishsense"
