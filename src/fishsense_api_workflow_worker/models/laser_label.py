@@ -7,7 +7,7 @@ from sqlmodel import Field, SQLModel
 
 
 class LaserLabel(SQLModel, table=True):
-    """Model representing a laser label from Label Studio."""
+    """Model representing a laser label."""
 
     id: int | None = Field(default=None, primary_key=True)
     label_studio_task_id: int | None = Field(default=None, unique=True, index=True)

@@ -7,7 +7,7 @@ from sqlmodel import Field, SQLModel
 
 
 class HeadTailLabel(SQLModel, table=True):
-    """Model representing a head-tail label from Label Studio."""
+    """Model representing a head-tail label."""
 
     id: int | None = Field(default=None, primary_key=True)
     label_studio_task_id: int | None = Field(default=None, unique=True, index=True)

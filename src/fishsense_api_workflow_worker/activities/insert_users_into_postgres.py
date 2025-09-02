@@ -1,3 +1,5 @@
+"""Activity to insert users into PostgreSQL database."""
+
 from typing import List
 
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -9,6 +11,7 @@ from fishsense_api_workflow_worker.models.user import User
 
 @activity.defn
 async def insert_users_into_postgres(users: List[User]):
+    """Activity to insert users into PostgreSQL database."""
     database = Database()
     async with AsyncSession(database.engine) as conn:
         for user in users:

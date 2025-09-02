@@ -1,3 +1,5 @@
+"""Database interaction module for FishSense API Workflow Worker."""
+
 from __future__ import annotations
 
 from typing import Iterable
@@ -16,6 +18,8 @@ from fishsense_api_workflow_worker.models.user import User
 
 
 class Database:
+    """Database interaction class for FishSense API Workflow Worker."""
+
     def __init__(self):
         self.engine = create_async_engine(self.__generate_database_url())
 
@@ -26,12 +30,14 @@ class Database:
         )
 
     async def init_database(self) -> None:
+        """Initialize the database by creating all tables."""
         async with self.engine.begin() as conn:
             await conn.run_sync(SQLModel.metadata.create_all)
 
     async def insert_or_update_camera(
         self, camera: Camera, session: AsyncSession | None = None
     ):
+        """Insert or update a camera in the database."""
         if session is not None:
             session.add(camera)
         else:
@@ -43,6 +49,7 @@ class Database:
     async def insert_or_update_dive(
         self, dive: Dive, session: AsyncSession | None = None
     ):
+        """Insert or update a dive in the database."""
         if session is not None:
             session.add(dive)
         else:
@@ -54,6 +61,7 @@ class Database:
     async def insert_or_update_head_tail_label(
         self, head_tail_label: HeadTailLabel, session: AsyncSession | None = None
     ):
+        """Insert or update a head-tail label in the database."""
         if session is not None:
             session.add(head_tail_label)
         else:
@@ -65,6 +73,7 @@ class Database:
     async def insert_or_update_image(
         self, image: Image, session: AsyncSession | None = None
     ):
+        """Insert or update an image in the database."""
         if session is not None:
             session.add(image)
         else:
@@ -76,6 +85,7 @@ class Database:
     async def insert_or_update_laser_label(
         self, laser_label: LaserLabel, session: AsyncSession | None = None
     ):
+        """Insert or update a laser label in the database."""
         if session is not None:
             session.add(laser_label)
         else:
@@ -87,6 +97,7 @@ class Database:
     async def insert_or_update_user(
         self, user: User, session: AsyncSession | None = None
     ):
+        """Insert or update a user in the database."""
         if session is not None:
             session.add(user)
         else:
@@ -96,6 +107,7 @@ class Database:
                 await session.commit()
 
     async def select_camera_by_serial_number(self, serial_number: str) -> Camera | None:
+        """Select a camera by its serial number."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
                 select(Camera).where(Camera.serial_number == serial_number)
@@ -104,12 +116,14 @@ class Database:
         return result.one_or_none()
 
     async def select_dive_by_path(self, dive_path: str) -> Dive | None:
+        """Select a dive by its path."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(Dive).where(Dive.path == dive_path))
 
         return result.one_or_none()
 
     async def select_dives(self) -> Iterable[Dive]:
+        """Select all dives ordered by dive datetime."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(Dive).order_by(Dive.dive_datetime))
 
@@ -118,6 +132,7 @@ class Database:
     async def select_head_tail_labels_by_task_id(
         self, task_id: int
     ) -> HeadTailLabel | None:
+        """Select head-tail labels by their Label Studio task ID."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
                 select(HeadTailLabel).where(
@@ -128,22 +143,25 @@ class Database:
         return result.one_or_none()
 
     async def select_image_by_checksum(self, image_checksum: str) -> Image | None:
+        """Select a canonical image by its checksum."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
                 select(Image).where(
-                    and_(Image.checksum == image_checksum, Image.is_canonical == True)
+                    and_(Image.checksum == image_checksum, Image.is_canonical)
                 )
             )
 
         return result.one_or_none()
 
     async def select_image_by_path(self, path: str) -> Image | None:
+        """Select an image by its path."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(Image).where(Image.path == path))
 
         return result.one_or_none()
 
     async def select_laser_label_by_task_id(self, task_id: int) -> LaserLabel | None:
+        """Select a laser label by its Label Studio task ID."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(
                 select(LaserLabel).where(LaserLabel.label_studio_task_id == task_id)
@@ -152,6 +170,7 @@ class Database:
         return result.one_or_none()
 
     async def select_user_by_email(self, email: str) -> User | None:
+        """Select a user by their email address."""
         async with AsyncSession(self.engine) as session:
             result = await session.exec(select(User).where(User.email == email))
 

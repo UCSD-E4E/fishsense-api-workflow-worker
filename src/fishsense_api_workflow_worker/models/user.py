@@ -1,3 +1,5 @@
+"""Model representing a user."""
+
 from datetime import datetime
 
 from label_studio_sdk import LseUserApi
@@ -5,6 +7,8 @@ from sqlmodel import Field, SQLModel
 
 
 class User(SQLModel, table=True):
+    """Model representing a user."""
+
     id: int = Field(default=None, primary_key=True)
     email: str = Field(max_length=100, unique=True)
     first_name: str = Field(max_length=100)
@@ -14,6 +18,8 @@ class User(SQLModel, table=True):
 
     @classmethod
     async def from_label_studio(cls, user: LseUserApi) -> "User":
+        """Create a User instance from a Label Studio user."""
+
         return cls(
             email=user.email,
             first_name=user.first_name,
