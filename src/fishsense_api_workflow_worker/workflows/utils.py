@@ -8,7 +8,9 @@ from temporalio import workflow
 from fishsense_api_workflow_worker.models.user import User
 
 
-async def sync_users(label_studio_host: str, label_studio_api_key: str):
+async def sync_users(
+    label_studio_host: str, label_studio_api_key: str, database_url: str
+):
     """Synchronize users from Label Studio to the local Postgres database."""
     users: List[User] = await workflow.execute_activity(
         "collect_label_studio_users",
@@ -18,6 +20,6 @@ async def sync_users(label_studio_host: str, label_studio_api_key: str):
 
     await workflow.execute_activity(
         "insert_users_into_postgres",
-        args=(users,),
+        args=(users, database_url),
         schedule_to_close_timeout=timedelta(minutes=10),
     )

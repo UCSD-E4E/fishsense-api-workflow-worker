@@ -42,6 +42,8 @@ from fishsense_api_workflow_worker.workflows.read_label_studio_laser_labels impo
     ReadLabelStudioLaserLabelsWorkflow,
 )
 
+from fishsense_api_workflow_worker.config import PG_CONNECTION_STRING
+
 TASK_QUEUE_NAME = "fishsense_api_queue"
 
 
@@ -73,6 +75,7 @@ async def schedule_read_label_studio_laser_label_workflows(client: Client):
                     args=(
                         settings.label_studio.host,
                         settings.label_studio.api_key,
+                        PG_CONNECTION_STRING,
                         laser_project_id,
                     ),
                     id=f"read-label-studio-laser-labels-workflow-{laser_project_id}",
@@ -105,6 +108,7 @@ async def schedule_read_label_studio_head_tail_label_workflows(client: Client):
                     args=(
                         settings.label_studio.host,
                         settings.label_studio.api_key,
+                        PG_CONNECTION_STRING,
                         head_tail_project_id,
                     ),
                     id=f"read-label-studio-head-tail-labels-workflow-{head_tail_project_id}",
@@ -132,7 +136,7 @@ async def main():
     configure_logging()
     log = logging.getLogger()
 
-    database = Database()
+    database = Database(PG_CONNECTION_STRING)
     await database.init_database()
 
     client = await Client.connect(f"{settings.temporal.host}:{settings.temporal.port}")

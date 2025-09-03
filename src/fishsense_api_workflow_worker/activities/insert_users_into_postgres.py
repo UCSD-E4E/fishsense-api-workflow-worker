@@ -10,9 +10,9 @@ from fishsense_api_workflow_worker.models.user import User
 
 
 @activity.defn
-async def insert_users_into_postgres(users: List[User]):
+async def insert_users_into_postgres(users: List[User], database_url: str):
     """Activity to insert users into PostgreSQL database."""
-    database = Database()
+    database = Database(database_url)
     async with AsyncSession(database.engine) as conn:
         for user in users:
             if activity.is_cancelled():

@@ -23,6 +23,7 @@ class ReadLabelStudioLaserLabelsWorkflow:
         self,
         label_studio_host: str,
         label_studio_api_key: str,
+        database_url: str,
         laser_project_id: int,
     ):
         """Run the workflow to read laser labels."""
@@ -33,16 +34,21 @@ class ReadLabelStudioLaserLabelsWorkflow:
             laser_project_id,
         )
 
-        await sync_users(label_studio_host, label_studio_api_key)
+        await sync_users(label_studio_host, label_studio_api_key, database_url)
 
         laser_labels: List[LaserLabel] = await workflow.execute_activity(
             "collect_label_studio_laser_labels",
-            args=(label_studio_host, label_studio_api_key, laser_project_id),
+            args=(
+                label_studio_host,
+                label_studio_api_key,
+                database_url,
+                laser_project_id,
+            ),
             schedule_to_close_timeout=timedelta(minutes=10),
         )
 
         await workflow.execute_activity(
             "insert_laser_labels_into_postgres",
-            args=(laser_labels,),
+            args=(laser_labels, database_url),
             schedule_to_close_timeout=timedelta(minutes=10),
         )

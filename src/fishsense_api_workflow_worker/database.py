@@ -20,14 +20,8 @@ from fishsense_api_workflow_worker.models.user import User
 class Database:
     """Database interaction class for FishSense API Workflow Worker."""
 
-    def __init__(self):
-        self.engine = create_async_engine(self.__generate_database_url())
-
-    def __generate_database_url(self) -> str:
-        return (
-            f"postgresql+asyncpg://{settings.postgres.username}:{settings.postgres.password}"
-            + f"@{settings.postgres.host}:{settings.postgres.port}/{settings.postgres.database}"
-        )
+    def __init__(self, database_url: str):
+        self.engine = create_async_engine(database_url)
 
     async def init_database(self) -> None:
         """Initialize the database by creating all tables."""

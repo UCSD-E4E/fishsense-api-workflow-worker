@@ -10,11 +10,13 @@ from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 
 
 @activity.defn
-async def insert_laser_labels_into_postgres(labels: List[LaserLabel]):
+async def insert_laser_labels_into_postgres(
+    labels: List[LaserLabel], database_url: str
+):
     # pylint: disable=duplicate-code
     """Activity to insert laser labels into PostgreSQL database."""
 
-    database = Database()
+    database = Database(database_url)
     async with AsyncSession(database.engine) as conn:
         for label in labels:
             if activity.is_cancelled():

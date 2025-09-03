@@ -12,7 +12,7 @@ from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 
 @activity.defn
 async def collect_label_studio_laser_labels(
-    label_studio_host: str, label_studio_api_key: str, laser_project_id: int
+    label_studio_host: str, label_studio_api_key: str, database_url: str, laser_project_id: int
 ) -> List[LaserLabel]:
     # pylint: disable=duplicate-code
 
@@ -26,7 +26,7 @@ async def collect_label_studio_laser_labels(
         base_url=f"https://{label_studio_host}", api_key=label_studio_api_key
     )
 
-    database = Database()
+    database = Database(database_url)
 
     labels: List[LaserLabel] = []
     for task in client.tasks.list(project=laser_project_id):

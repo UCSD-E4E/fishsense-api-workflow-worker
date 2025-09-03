@@ -10,11 +10,11 @@ from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 
 
 @activity.defn
-async def insert_head_tail_labels_into_postgres(labels: List[HeadTailLabel]):
+async def insert_head_tail_labels_into_postgres(labels: List[HeadTailLabel], database_url: str):
     # pylint: disable=duplicate-code
     """Activity to insert head-tail labels into PostgreSQL database."""
 
-    database = Database()
+    database = Database(database_url)
     async with AsyncSession(database.engine) as conn:
         for label in labels:
             if activity.is_cancelled():

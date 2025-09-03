@@ -12,7 +12,7 @@ from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 
 @activity.defn
 async def collect_label_studio_head_tail_labels(
-    label_studio_host: str, label_studio_api_key: str, head_tail_project_id: int
+    label_studio_host: str, label_studio_api_key: str, database_url: str, head_tail_project_id: int
 ) -> List[HeadTailLabel]:
     # pylint: disable=duplicate-code
 
@@ -29,7 +29,7 @@ async def collect_label_studio_head_tail_labels(
         base_url=f"https://{label_studio_host}", api_key=label_studio_api_key
     )
 
-    database = Database()
+    database = Database(database_url)
 
     labels: List[HeadTailLabel] = []
     for task in client.tasks.list(project=head_tail_project_id):
