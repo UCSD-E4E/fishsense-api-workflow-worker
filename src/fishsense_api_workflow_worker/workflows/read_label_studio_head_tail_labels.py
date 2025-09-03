@@ -44,7 +44,7 @@ class ReadLabelStudioHeadTailLabelsWorkflow:
                 database_url,
                 head_tail_project_id,
             ),
-            schedule_to_close_timeout=timedelta(minutes=10),
+            schedule_to_close_timeout=timedelta(minutes=20),
         )
 
         await workflow.execute_activity(
