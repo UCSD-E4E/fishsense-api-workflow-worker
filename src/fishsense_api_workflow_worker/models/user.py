@@ -7,7 +7,8 @@ from sqlmodel import Field, SQLModel
 
 class User(SQLModel, table=True):
     """Model representing a user."""
-    from label_studio_sdk import LseUserApi
+
+    from label_studio_sdk import LseUserApi  # pylint: disable=import-outside-toplevel
 
     id: int = Field(default=None, primary_key=True)
     email: str = Field(max_length=100, unique=True)
