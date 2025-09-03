@@ -175,3 +175,12 @@ class Database:
             result = await session.exec(select(User).where(User.email == email))
 
         return result.one_or_none()
+
+    async def select_user_by_label_studio_id(self, label_studio_id: str) -> User | None:
+        """Select a user by their Label Studio ID."""
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(
+                select(User).where(User.label_studio_id == label_studio_id)
+            )
+
+        return result.one_or_none()

@@ -12,14 +12,9 @@ async def sync_users(
     label_studio_host: str, label_studio_api_key: str, database_url: str
 ):
     """Synchronize users from Label Studio to the local Postgres database."""
-    users: List[User] = await workflow.execute_activity(
-        "collect_label_studio_users",
-        args=(label_studio_host, label_studio_api_key),
-        schedule_to_close_timeout=timedelta(minutes=10),
-    )
 
     await workflow.execute_activity(
-        "insert_users_into_postgres",
-        args=(users, database_url),
+        "sync_users_into_postgres",
+        args=(label_studio_host, label_studio_api_key, database_url),
         schedule_to_close_timeout=timedelta(minutes=10),
     )

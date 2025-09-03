@@ -36,8 +36,8 @@ class ReadLabelStudioHeadTailLabelsWorkflow:
 
         await sync_users(label_studio_host, label_studio_api_key, database_url)
 
-        head_tail_labels: List[HeadTailLabel] = await workflow.execute_activity(
-            "collect_label_studio_head_tail_labels",
+        await workflow.execute_activity(
+            "sync_label_studio_head_tail_labels",
             args=(
                 label_studio_host,
                 label_studio_api_key,
@@ -45,10 +45,4 @@ class ReadLabelStudioHeadTailLabelsWorkflow:
                 head_tail_project_id,
             ),
             schedule_to_close_timeout=timedelta(minutes=20),
-        )
-
-        await workflow.execute_activity(
-            "insert_head_tail_labels_into_postgres",
-            args=(head_tail_labels, database_url),
-            schedule_to_close_timeout=timedelta(minutes=10),
         )

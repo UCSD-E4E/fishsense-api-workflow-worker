@@ -1,8 +1,8 @@
 """Worker for FishSense API Workflow"""
 
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 
 from temporalio.client import (
@@ -15,25 +15,20 @@ from temporalio.client import (
 )
 from temporalio.worker import Worker
 
-from fishsense_api_workflow_worker.activities.collect_label_studio_head_tail_labels import (
-    collect_label_studio_head_tail_labels,
+from fishsense_api_workflow_worker.activities.sync_label_studio_head_tail_labels import (
+    sync_label_studio_head_tail_labels,
 )
-from fishsense_api_workflow_worker.activities.collect_label_studio_laser_labels import (
-    collect_label_studio_laser_labels,
+from fishsense_api_workflow_worker.activities.sync_label_studio_laser_labels import (
+    sync_label_studio_laser_labels,
 )
-from fishsense_api_workflow_worker.activities.collect_label_studio_users import (
-    collect_label_studio_users,
+from fishsense_api_workflow_worker.activities.sync_users_into_postgres import (
+    sync_users_into_postgres,
 )
-from fishsense_api_workflow_worker.activities.insert_head_tail_labels_into_postgres import (
-    insert_head_tail_labels_into_postgres,
+from fishsense_api_workflow_worker.config import (
+    PG_CONNECTION_STRING,
+    configure_logging,
+    settings,
 )
-from fishsense_api_workflow_worker.activities.insert_laser_labels_into_postgres import (
-    insert_laser_labels_into_postgres,
-)
-from fishsense_api_workflow_worker.activities.insert_users_into_postgres import (
-    insert_users_into_postgres,
-)
-from fishsense_api_workflow_worker.config import configure_logging, settings
 from fishsense_api_workflow_worker.database import Database
 from fishsense_api_workflow_worker.workflows.read_label_studio_head_tail_labels import (
     ReadLabelStudioHeadTailLabelsWorkflow,
@@ -41,8 +36,6 @@ from fishsense_api_workflow_worker.workflows.read_label_studio_head_tail_labels 
 from fishsense_api_workflow_worker.workflows.read_label_studio_laser_labels import (
     ReadLabelStudioLaserLabelsWorkflow,
 )
-
-from fishsense_api_workflow_worker.config import PG_CONNECTION_STRING
 
 TASK_QUEUE_NAME = "fishsense_api_queue"
 
@@ -151,12 +144,9 @@ async def main():
             ],
             activity_executor=executor,
             activities=[
-                insert_laser_labels_into_postgres,
-                insert_head_tail_labels_into_postgres,
-                insert_users_into_postgres,
-                collect_label_studio_laser_labels,
-                collect_label_studio_head_tail_labels,
-                collect_label_studio_users,
+                sync_label_studio_laser_labels,
+                sync_label_studio_head_tail_labels,
+                sync_users_into_postgres,
             ],
         )
 
@@ -168,5 +158,7 @@ async def main():
 
 
 def run():
+    """Run the worker."""
+    asyncio.run(main())
     """Run the worker."""
     asyncio.run(main())
