@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v1.9.0 (2025-09-03)
+
+### Features
+
+- Add missing user label studio id to database
+  ([`e733291`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/e733291e6d6f6f5c7f9b9b7af69888c9a8f0410c))
+
+- Touch to force a new minor version
+  ([`b394240`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/b39424080b6eee4645ae2830150b0fb1c737c762))
+
+
 ## v1.8.0 (2025-09-03)
 
 ### Features
