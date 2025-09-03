@@ -19,8 +19,8 @@ class User(SQLModel, table=True):
     def from_label_studio(cls, user) -> "User":
         """Create a User instance from a Label Studio user."""
 
-        from label_studio_sdk import (
-            LseUserApi,  # pylint: disable=import-outside-toplevel
+        from label_studio_sdk import (  # pylint: disable=import-outside-toplevel
+            LseUserApi,
         )
 
         user: LseUserApi = user
