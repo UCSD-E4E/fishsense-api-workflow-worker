@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.8 (2025-09-03)
+
+### Bug Fixes
+
+- Use timezone utc in database
+  ([`69c8298`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/69c829863d732f035bfd1df73a54b6cb5e72bf65))
+
+
 ## v1.5.7 (2025-09-03)
 
 ### Bug Fixes
