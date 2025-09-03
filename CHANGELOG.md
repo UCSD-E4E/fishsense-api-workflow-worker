@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.7 (2025-09-03)
+
+### Bug Fixes
+
+- Use timezone aware times for user creation in label studio
+  ([`720b87f`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/720b87f284fd6b17e642fa98032a8fc05e6347d8))
+
+
 ## v1.5.6 (2025-09-03)
 
 ### Bug Fixes
