@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v1.5.4 (2025-09-03)
+
+### Bug Fixes
+
+- Please pylint
+  ([`4354ca3`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/4354ca36bd7e9752f053c7d64ffc3a42950b0055))
+
+- Pydantic doesn't like the label studio api type
+  ([`3be187d`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/3be187d313646aeac72a4f475b9e11ba7cccd87d))
+
+
 ## v1.5.3 (2025-09-03)
 
 ### Bug Fixes
