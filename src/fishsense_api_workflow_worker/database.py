@@ -162,6 +162,13 @@ class Database:
 
         return result.one_or_none()
 
+    async def select_laser_labels(self) -> Iterable[LaserLabel]:
+        """Select all laser labels."""
+        async with AsyncSession(self.engine) as session:
+            result = await session.exec(select(LaserLabel))
+
+        return result.all()
+
     async def select_user_by_email(self, email: str) -> User | None:
         """Select a user by their email address."""
         async with AsyncSession(self.engine) as session:

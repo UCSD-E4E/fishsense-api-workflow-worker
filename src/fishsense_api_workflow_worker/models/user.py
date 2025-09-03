@@ -12,7 +12,8 @@ class User(SQLModel, table=True):
     """Model representing a user."""
 
     id: int | None = Field(default=None, primary_key=True)
-    email: str = Field(max_length=100, unique=True)
+    label_studio_id: int | None = Field(default=None, unique=True, index=True)
+    email: str = Field(max_length=100, unique=True, index=True)
     first_name: str = Field(max_length=100)
     last_name: str = Field(max_length=100)
     last_activity: datetime | None = Field(
@@ -31,6 +32,7 @@ class User(SQLModel, table=True):
         user: LseUserApi = user
 
         return cls(
+            label_studio_id=user.id,
             email=user.email,
             first_name=user.first_name,
             last_name=user.last_name,
