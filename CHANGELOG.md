@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.1 (2025-09-03)
+
+### Bug Fixes
+
+- Pylint errors
+  ([`461e2f8`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/461e2f88e4d2fe518ea90808686320987bd9d326))
+
+
 ## v1.5.0 (2025-09-02)
 
 ### Features
