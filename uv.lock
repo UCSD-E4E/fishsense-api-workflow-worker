@@ -358,7 +358,7 @@ wheels = [
 
 [[package]]
 name = "fishsense-api-workflow-worker"
-version = "1.5.5"
+version = "1.5.7"
 source = { editable = "." }
 dependencies = [
     { name = "asyncpg" },
@@ -367,7 +367,6 @@ dependencies = [
     { name = "platformdirs" },
     { name = "psycopg", extra = ["binary"] },
     { name = "pydantic" },
-    { name = "pytz" },
     { name = "sqlmodel" },
     { name = "temporalio" },
     { name = "tqdm" },
@@ -388,7 +387,6 @@ requires-dist = [
     { name = "platformdirs", specifier = ">=4.3.8" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.9" },
     { name = "pydantic", specifier = ">=2.11.7" },
-    { name = "pytz", specifier = ">=2025.2" },
     { name = "sqlmodel", specifier = ">=0.0.24" },
     { name = "temporalio", specifier = ">=1.15.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
