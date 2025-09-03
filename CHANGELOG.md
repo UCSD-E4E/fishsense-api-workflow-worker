@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v1.5.2 (2025-09-03)
+
+### Bug Fixes
+
+- Move label studio import into class.
+  ([`79c158b`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/79c158b6cb61e619ffd47c40559454ba35859ea6))
+
+- Please pylint
+  ([`233d5b0`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/233d5b092ea94aa43a7edf4da1bf60373c38e22e))
+
+
 ## v1.5.1 (2025-09-03)
 
 ### Bug Fixes
