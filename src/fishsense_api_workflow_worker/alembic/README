@@ -1,7 +1,7 @@
 Generic single-database configuration with an async dbapi.
 
 To create a new migration
-```
+```bash
 uv run alembic revision --autogenerate -m "message"
 ```
 
