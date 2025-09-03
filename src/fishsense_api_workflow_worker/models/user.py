@@ -1,8 +1,11 @@
 """Model representing a user."""
 
-from datetime import datetime
+from __future__ import annotations
 
-from sqlmodel import Field, SQLModel
+from datetime import datetime
+from typing import Self
+
+from sqlmodel import DateTime, Field, SQLModel
 
 
 class User(SQLModel, table=True):
@@ -12,11 +15,13 @@ class User(SQLModel, table=True):
     email: str = Field(max_length=100, unique=True)
     first_name: str = Field(max_length=100)
     last_name: str = Field(max_length=100)
-    last_activity: datetime | None = Field(default=None)
-    date_joined: datetime | None = Field(default=None)
+    last_activity: datetime | None = Field(
+        sa_type=DateTime(timezone=True), default=None
+    )
+    date_joined: datetime | None = Field(sa_type=DateTime(timezone=True), default=None)
 
     @classmethod
-    def from_label_studio(cls, user) -> "User":
+    def from_label_studio(cls, user) -> Self:
         """Create a User instance from a Label Studio user."""
 
         from label_studio_sdk import (  # pylint: disable=import-outside-toplevel

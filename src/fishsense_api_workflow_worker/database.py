@@ -20,9 +20,7 @@ class Database:
     """Database interaction class for FishSense API Workflow Worker."""
 
     def __init__(self, database_url: str):
-        self.engine = create_async_engine(
-            database_url, connect_args={"options": "-c timezone=utc"}
-        )
+        self.engine = create_async_engine(database_url)
 
     async def init_database(self) -> None:
         """Initialize the database by creating all tables."""
