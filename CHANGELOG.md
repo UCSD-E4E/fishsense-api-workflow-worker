@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.9.1 (2025-09-03)
+
+### Bug Fixes
+
+- Update workflows to timeout after 20 minutes instead of 10
+  ([`06ec086`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/06ec08693a269c78474f24a463f7b4822e99d85e))
+
+
 ## v1.9.0 (2025-09-03)
 
 ### Features
