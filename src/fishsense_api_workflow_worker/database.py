@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel import SQLModel, and_, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from fishsense_api_workflow_worker.config import settings
 from fishsense_api_workflow_worker.models.camera import Camera
 from fishsense_api_workflow_worker.models.dive import Dive
 from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
