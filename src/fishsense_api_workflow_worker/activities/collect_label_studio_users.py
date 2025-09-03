@@ -13,6 +13,6 @@ def collect_label_studio_users(
     label_studio_host: str, label_studio_api_key: str
 ) -> List[User]:
     """Activity to collect users from Label Studio."""
-    client = LabelStudio(base_url=label_studio_host, api_key=label_studio_api_key)
+    client = LabelStudio(base_url=f"https://{label_studio_host}", api_key=label_studio_api_key)
     users = client.users.list()
     return [User.from_label_studio(user) for user in users]
