@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.6 (2025-09-03)
+
+### Bug Fixes
+
+- Pydantic allow null user ids
+  ([`275fd59`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/275fd59b4fb70bbc0eb1783d68308828f19b7c60))
+
+
 ## v1.5.5 (2025-09-03)
 
 ### Bug Fixes
