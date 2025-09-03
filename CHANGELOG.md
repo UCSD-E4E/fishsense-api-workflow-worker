@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v1.9.2 (2025-09-03)
+
+### Bug Fixes
+
+- Merge collect and insert activities so that we don't need to share data.
+  ([`2f65b58`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/2f65b581852b975350df0877ba16f57a15a92ac1))
+
+- Pylint errors
+  ([`67a8965`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/67a8965ce7f707ce0cd4616b9e6d731b01b7ac4b))
+
+
 ## v1.9.1 (2025-09-03)
 
 ### Bug Fixes
