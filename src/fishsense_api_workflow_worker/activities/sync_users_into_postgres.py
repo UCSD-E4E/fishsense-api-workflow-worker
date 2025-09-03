@@ -1,7 +1,5 @@
 """Activity to sync users from Label Studio to Postgres database."""
 
-from typing import List
-
 from label_studio_sdk.client import LabelStudio
 from sqlmodel.ext.asyncio.session import AsyncSession
 from temporalio import activity

@@ -1,7 +1,5 @@
 """Activity to sync head-tail labels from Label Studio to the database."""
 
-from cProfile import label
-
 from label_studio_sdk.client import LabelStudio
 from sqlmodel.ext.asyncio.session import AsyncSession
 from temporalio import activity

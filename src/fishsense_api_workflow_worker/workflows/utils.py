@@ -1,11 +1,8 @@
 """Utility functions for workflows."""
 
 from datetime import timedelta
-from typing import List
 
 from temporalio import workflow
-
-from fishsense_api_workflow_worker.models.user import User
 
 
 async def sync_users(

@@ -160,5 +160,3 @@ async def main():
 def run():
     """Run the worker."""
     asyncio.run(main())
-    """Run the worker."""
-    asyncio.run(main())

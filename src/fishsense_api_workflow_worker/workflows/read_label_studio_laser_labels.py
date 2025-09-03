@@ -2,11 +2,9 @@
 
 import logging
 from datetime import timedelta
-from typing import List
 
 from temporalio import workflow
 
-from fishsense_api_workflow_worker.models.laser_label import LaserLabel
 from fishsense_api_workflow_worker.workflows.utils import sync_users
 
 
