@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.5 (2025-09-03)
+
+### Bug Fixes
+
+- Failed run for collecting user b/c we did not specify a url
+  ([`a5c5a3f`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/a5c5a3f8da014623ad30d8b90e867332ac05ceac))
+
+
 ## v1.5.4 (2025-09-03)
 
 ### Bug Fixes
