@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.7.0 (2025-09-03)
+
+### Features
+
+- Add json and updated date to label studio labels
+  ([`158e633`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/158e633a0f4c9ed4f237feac909318218ecac3ca))
+
+
 ## v1.6.0 (2025-09-03)
 
 ### Bug Fixes
