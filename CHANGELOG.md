@@ -2,6 +2,30 @@
 
 <!-- version list -->
 
+## v1.6.0 (2025-09-03)
+
+### Bug Fixes
+
+- Touch to force a new version
+  ([`41c2d8d`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/41c2d8d1be02dd0359167495ee804a75ab712512))
+
+### Chores
+
+- Readme update
+  ([`9e985ef`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/9e985efa9d99602bd95fcbd62343694f2221752d))
+
+- Update readme again
+  ([`b83b677`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/b83b677722697d87018e94a108097d42e745ed03))
+
+### Features
+
+- Add alembic
+  ([`49a1d27`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/49a1d271d9cf1695c6748c5b9d27da1ad4959a6c))
+
+- Add alembic for database migrations
+  ([`98fe307`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/98fe3077a8120a94c2607a590123be084d4a361e))
+
+
 ## v1.5.8 (2025-09-03)
 
 ### Bug Fixes
