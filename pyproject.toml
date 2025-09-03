@@ -5,6 +5,7 @@ description = "Temporal API Workflow Worker"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.16.5",
     "asyncpg>=0.30.0",
     "dynaconf>=3.2.11",
     "label-studio-sdk>=2.0.1",
