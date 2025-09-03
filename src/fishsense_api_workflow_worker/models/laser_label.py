@@ -1,9 +1,11 @@
 """Model representing a laser label from Label Studio."""
 
+import json
 import logging
-from typing import Any
+from datetime import datetime
+from typing import Any, Dict
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import JSON, Column, DateTime, Field, SQLModel
 
 
 class LaserLabel(SQLModel, table=True):
@@ -14,6 +16,8 @@ class LaserLabel(SQLModel, table=True):
     x: int | None = Field(default=None)
     y: int | None = Field(default=None)
     label: str | None = Field(default=None)
+    updated_at: datetime | None = Field(sa_type=DateTime(timezone=True), default=None)
+    json: Dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
 
     image_id: int | None = Field(default=None, foreign_key="image.id")
     user_id: int | None = Field(default=None, foreign_key="user.id")
@@ -30,6 +34,8 @@ class LaserLabel(SQLModel, table=True):
             x=cls.__parse_x_y(task)[0],
             y=cls.__parse_x_y(task)[1],
             label=cls.__parse_label(task),
+            updated_at=cls.__parse_updated_time(task),
+            json=json.loads(task.json()),
         )
 
     @staticmethod
@@ -63,3 +69,12 @@ class LaserLabel(SQLModel, table=True):
         log.debug("Parsed label: %s", label)
 
         return label
+
+    @staticmethod
+    def __parse_updated_time(task: Any) -> datetime | None:
+        log = logging.getLogger("LaserLabel")
+        updated_at = datetime.fromisoformat(task.annotations[0]["updated_at"])
+
+        log.debug("Parsed updated_at: %s", updated_at)
+
+        return updated_at
