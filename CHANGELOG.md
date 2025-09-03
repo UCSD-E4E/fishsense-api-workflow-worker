@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.5.3 (2025-09-03)
+
+### Bug Fixes
+
+- Pydantic errors with label studio api
+  ([`20f0507`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/20f0507d24cfc646fe16013a8aec115c18dc9e6c))
+
+
 ## v1.5.2 (2025-09-03)
 
 ### Bug Fixes
