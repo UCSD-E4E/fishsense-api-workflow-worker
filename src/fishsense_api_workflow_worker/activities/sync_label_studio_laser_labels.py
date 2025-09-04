@@ -42,14 +42,14 @@ async def sync_label_studio_laser_labels(
                 task.id, session=conn
             )
 
-            laser_label = LaserLabel.from_task(task)
-            laser_label.image_id = existing_label.image_id if existing_label else None
-            laser_label.user_id = user.id if user else None
-
             user = await database.select_user_by_email(
                 task.annotations[0]["created_username"].split(",")[0].strip(),
                 session=conn,
             )
+
+            laser_label = LaserLabel.from_task(task)
+            laser_label.image_id = existing_label.image_id if existing_label else None
+            laser_label.user_id = user.id if user else None
 
             if existing_label:
                 laser_label.id = existing_label.id
