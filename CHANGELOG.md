@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.10.1 (2025-09-04)
+
+### Bug Fixes
+
+- Make sure user exists in laser label before trying to use it
+  ([`0409300`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/04093009c581f5e6c44eebd5d957b2d13690a114))
+
+
 ## v1.10.0 (2025-09-04)
 
 ### Bug Fixes
