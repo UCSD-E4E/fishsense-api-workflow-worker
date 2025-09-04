@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v1.10.0 (2025-09-04)
+
+### Bug Fixes
+
+- Pylint issues
+  ([`78ac102`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/78ac1023dbb3f37933d3cd880db842819e7c9121))
+
+### Chores
+
+- Finished migrating laser labels
+  ([`d716b79`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/d716b792d52213017d8c572a9e80b758c73255de))
+
+### Features
+
+- Add completed tag to labels
+  ([`e2597a4`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/e2597a4172b67331ad969743795550f224196319))
+
+
 ## v1.9.2 (2025-09-03)
 
 ### Bug Fixes
