@@ -1,14 +1,21 @@
 """This module defines the HeadTailLabel model, which represents a head-tail label"""
 
+from __future__ import annotations
+
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Self
 
 from sqlmodel import JSON, Column, DateTime, Field, SQLModel
 
+from fishsense_api_workflow_worker.models.label_studio_label_base import (
+    LabelStudioLabelBase,
+)
 
-class HeadTailLabel(SQLModel, table=True):
+
+class HeadTailLabel(LabelStudioLabelBase, SQLModel, table=True):
+    # pylint: disable=duplicate-code
     """Model representing a head-tail label."""
 
     id: int | None = Field(default=None, primary_key=True)
@@ -25,7 +32,7 @@ class HeadTailLabel(SQLModel, table=True):
     user_id: int | None = Field(default=None, foreign_key="user.id")
 
     @classmethod
-    def from_task(cls, task: Any) -> "HeadTailLabel":
+    def from_task(cls, task: Any) -> Self:
         """Create a HeadTailLabel instance from a Label Studio task."""
 
         log = logging.getLogger("HeadTailLabel")
@@ -38,17 +45,13 @@ class HeadTailLabel(SQLModel, table=True):
             tail_x=cls.__parse_x_y(task, "Fork")[0],
             tail_y=cls.__parse_x_y(task, "Fork")[1],
             updated_at=cls.__parse_updated_time(task),
-            completed=cls.__has_result(task),
+            completed=cls.label_studio_task_has_result(task),
             json=json.loads(task.json()),
         )
 
     @staticmethod
-    def __has_result(task: Any) -> bool:
-        return bool(task.annotations and task.annotations[0]["result"])
-
-    @staticmethod
     def __parse_x_y(task: Any, label: str) -> tuple[int | None, int | None]:
-        if HeadTailLabel.__has_result(task) is False:
+        if HeadTailLabel.label_studio_task_has_result(task) is False:
             return None, None
 
         label_value = [

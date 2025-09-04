@@ -1,14 +1,21 @@
 """Model representing a laser label from Label Studio."""
 
+from __future__ import annotations
+
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Self
 
 from sqlmodel import JSON, Column, DateTime, Field, SQLModel
 
+from fishsense_api_workflow_worker.models.label_studio_label_base import (
+    LabelStudioLabelBase,
+)
 
-class LaserLabel(SQLModel, table=True):
+
+class LaserLabel(LabelStudioLabelBase, SQLModel, table=True):
+    # pylint: disable=duplicate-code
     """Model representing a laser label."""
 
     id: int | None = Field(default=None, primary_key=True)
@@ -24,7 +31,7 @@ class LaserLabel(SQLModel, table=True):
     user_id: int | None = Field(default=None, foreign_key="user.id")
 
     @classmethod
-    def from_task(cls, task: Any) -> "LaserLabel":
+    def from_task(cls, task: Any) -> Self:
         """Create a LaserLabel instance from a Label Studio task."""
 
         log = logging.getLogger("LaserLabel")
@@ -36,17 +43,13 @@ class LaserLabel(SQLModel, table=True):
             y=cls.__parse_x_y(task)[1],
             label=cls.__parse_label(task),
             updated_at=cls.__parse_updated_time(task),
-            completed=cls.__has_result(task),
+            completed=cls.label_studio_task_has_result(task),
             json=json.loads(task.json()),
         )
 
     @staticmethod
-    def __has_result(task: Any) -> bool:
-        return bool(task.annotations and task.annotations[0]["result"])
-
-    @staticmethod
     def __parse_x_y(task: Any) -> tuple[int, int]:
-        if LaserLabel.__has_result(task) is False:
+        if LaserLabel.label_studio_task_has_result(task) is False:
             return None, None
 
         log = logging.getLogger("LaserLabel")
@@ -72,7 +75,7 @@ class LaserLabel(SQLModel, table=True):
 
     @staticmethod
     def __parse_label(task: Any) -> str:
-        if LaserLabel.__has_result(task) is False:
+        if LaserLabel.label_studio_task_has_result(task) is False:
             return None
 
         log = logging.getLogger("LaserLabel")
