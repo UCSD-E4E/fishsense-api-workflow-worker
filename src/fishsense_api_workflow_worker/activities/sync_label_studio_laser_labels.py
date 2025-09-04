@@ -35,22 +35,22 @@ async def sync_label_studio_laser_labels(
                 await conn.rollback()
                 return
 
-            if not task.annotations or not task.annotations[0]["result"]:
+            if not task.annotations:
                 continue
 
-            existing_labels = await database.select_laser_label_by_task_id(task.id)
-
-            user = await database.select_user_by_email(
-                task.annotations[0]["created_username"].split(",")[0].strip()
+            existing_label = await database.select_laser_label_by_task_id(
+                task.id, session=conn
             )
 
             laser_label = LaserLabel.from_task(task)
-            laser_label.image_id = existing_labels.image_id if existing_labels else None
+            laser_label.image_id = existing_label.image_id if existing_label else None
             laser_label.user_id = user.id if user else None
 
-            existing_label = await database.select_laser_label_by_task_id(
-                laser_label.label_studio_task_id
+            user = await database.select_user_by_email(
+                task.annotations[0]["created_username"].split(",")[0].strip(),
+                session=conn,
             )
+
             if existing_label:
                 laser_label.id = existing_label.id
 

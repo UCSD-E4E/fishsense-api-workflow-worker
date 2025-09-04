@@ -17,6 +17,7 @@ class LaserLabel(SQLModel, table=True):
     y: int | None = Field(default=None)
     label: str | None = Field(default=None)
     updated_at: datetime | None = Field(sa_type=DateTime(timezone=True), default=None)
+    completed: bool | None = Field(default=False)
     json: Dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
 
     image_id: int | None = Field(default=None, foreign_key="image.id")
@@ -35,11 +36,19 @@ class LaserLabel(SQLModel, table=True):
             y=cls.__parse_x_y(task)[1],
             label=cls.__parse_label(task),
             updated_at=cls.__parse_updated_time(task),
+            completed=cls.__has_result(task),
             json=json.loads(task.json()),
         )
 
     @staticmethod
+    def __has_result(task: Any) -> bool:
+        return bool(task.annotations and task.annotations[0]["result"])
+
+    @staticmethod
     def __parse_x_y(task: Any) -> tuple[int, int]:
+        if LaserLabel.__has_result(task) is False:
+            return None, None
+
         log = logging.getLogger("LaserLabel")
         original_width = task.annotations[0]["result"][0]["original_width"]
         original_height = task.annotations[0]["result"][0]["original_height"]
@@ -63,6 +72,9 @@ class LaserLabel(SQLModel, table=True):
 
     @staticmethod
     def __parse_label(task: Any) -> str:
+        if LaserLabel.__has_result(task) is False:
+            return None
+
         log = logging.getLogger("LaserLabel")
         label = task.annotations[0]["result"][0]["value"]["keypointlabels"][0]
 

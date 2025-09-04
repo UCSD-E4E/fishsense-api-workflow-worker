@@ -37,38 +37,39 @@ async def sync_label_studio_head_tail_labels(
                 await conn.rollback()
                 return
 
-            if not task.annotations or not task.annotations[0]["result"]:
+            if not task.annotations:
                 continue
 
-            keypoint_labels = {
-                label
-                for result in task.annotations[0]["result"]
-                for label in result["value"]["keypointlabels"]
-            }
+            existing_label = await database.select_head_tail_labels_by_task_id(
+                task.id, session=conn
+            )
 
-            if len(keypoint_labels) != 2:
-                log.warning(
-                    "Task %s has %d keypoint labels, expected 2. Skipping task.",
-                    task.id,
-                    len(keypoint_labels),
-                )
-                continue
+            if task.annotations[0]["result"]:
+                keypoint_labels = {
+                    label
+                    for result in task.annotations[0]["result"]
+                    for label in result["value"]["keypointlabels"]
+                }
 
-            existing_labels = await database.select_head_tail_labels_by_task_id(task.id)
+                if len(keypoint_labels) != 2:
+                    log.warning(
+                        "Task %s has %d keypoint labels, expected 2. Skipping task.",
+                        task.id,
+                        len(keypoint_labels),
+                    )
+                    continue
 
             user = await database.select_user_by_email(
-                task.annotations[0]["created_username"].split(",")[0].strip()
+                task.annotations[0]["created_username"].split(",")[0].strip(),
+                session=conn,
             )
 
             headtail_label = HeadTailLabel.from_task(task)
             headtail_label.image_id = (
-                existing_labels.image_id if existing_labels else None
+                existing_label.image_id if existing_label else None
             )
             headtail_label.user_id = user.id if user else None
 
-            existing_label = await database.select_head_tail_labels_by_task_id(
-                headtail_label.label_studio_task_id
-            )
             if existing_label:
                 headtail_label.id = existing_label.id
 

@@ -52,7 +52,9 @@ class Database:
                 await session.commit()
 
     async def insert_or_update_head_tail_label(
-        self, head_tail_label: HeadTailLabel, session: AsyncSession | None = None
+        self,
+        head_tail_label: HeadTailLabel,
+        session: AsyncSession | None = None,
     ):
         """Insert or update (upsert) a head-tail label in the database."""
         if session is not None:
@@ -99,88 +101,158 @@ class Database:
 
                 await session.commit()
 
-    async def select_camera_by_serial_number(self, serial_number: str) -> Camera | None:
+    async def select_camera_by_serial_number(
+        self, serial_number: str, session: AsyncSession | None = None
+    ) -> Camera | None:
         """Select a camera by its serial number."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(
-                select(Camera).where(Camera.serial_number == serial_number)
-            )
+        query = select(Camera).where(Camera.serial_number == serial_number)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.one_or_none()
 
-    async def select_dive_by_path(self, dive_path: str) -> Dive | None:
+    async def select_dive_by_path(
+        self, dive_path: str, session: AsyncSession | None = None
+    ) -> Dive | None:
         """Select a dive by its path."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(Dive).where(Dive.path == dive_path))
+        query = select(Dive).where(Dive.path == dive_path)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.one_or_none()
 
-    async def select_dives(self) -> Iterable[Dive]:
+    async def select_dives(self, session: AsyncSession | None = None) -> Iterable[Dive]:
         """Select all dives ordered by dive datetime."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(Dive).order_by(Dive.dive_datetime))
+        query = select(Dive).order_by(Dive.dive_datetime)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.all()
 
     async def select_head_tail_labels_by_task_id(
-        self, task_id: int
+        self, task_id: int, session: AsyncSession | None = None
     ) -> HeadTailLabel | None:
         """Select head-tail labels by their Label Studio task ID."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(
-                select(HeadTailLabel).where(
-                    HeadTailLabel.label_studio_task_id == task_id
-                )
-            )
+        query = select(HeadTailLabel).where(
+            HeadTailLabel.label_studio_task_id == task_id
+        )
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.one_or_none()
 
-    async def select_image_by_checksum(self, image_checksum: str) -> Image | None:
-        """Select a canonical image by its checksum."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(
-                select(Image).where(
-                    and_(Image.checksum == image_checksum, Image.is_canonical)
-                )
-            )
+    async def select_head_tail_labels(
+        self, session: AsyncSession | None = None
+    ) -> Iterable[HeadTailLabel]:
+        """Select all head-tail labels."""
+        query = select(HeadTailLabel)
 
-        return result.one_or_none()
-
-    async def select_image_by_path(self, path: str) -> Image | None:
-        """Select an image by its path."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(Image).where(Image.path == path))
-
-        return result.one_or_none()
-
-    async def select_laser_label_by_task_id(self, task_id: int) -> LaserLabel | None:
-        """Select a laser label by its Label Studio task ID."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(
-                select(LaserLabel).where(LaserLabel.label_studio_task_id == task_id)
-            )
-
-        return result.one_or_none()
-
-    async def select_laser_labels(self) -> Iterable[LaserLabel]:
-        """Select all laser labels."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(LaserLabel))
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.all()
 
-    async def select_user_by_email(self, email: str) -> User | None:
-        """Select a user by their email address."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(select(User).where(User.email == email))
+    async def select_image_by_checksum(
+        self, image_checksum: str, session: AsyncSession | None = None
+    ) -> Image | None:
+        """Select a canonical image by its checksum."""
+        query = select(Image).where(
+            and_(Image.checksum == image_checksum, Image.is_canonical)
+        )
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.one_or_none()
 
-    async def select_user_by_label_studio_id(self, label_studio_id: str) -> User | None:
+    async def select_image_by_path(
+        self, path: str, session: AsyncSession | None = None
+    ) -> Image | None:
+        """Select an image by its path."""
+        query = select(Image).where(Image.path == path)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.one_or_none()
+
+    async def select_laser_label_by_task_id(
+        self, task_id: int, session: AsyncSession | None = None
+    ) -> LaserLabel | None:
+        """Select a laser label by its Label Studio task ID."""
+        query = select(LaserLabel).where(LaserLabel.label_studio_task_id == task_id)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.one_or_none()
+
+    async def select_laser_labels(
+        self, session: AsyncSession | None = None
+    ) -> Iterable[LaserLabel]:
+        """Select all laser labels."""
+        query = select(LaserLabel)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
+    async def select_user_by_email(
+        self, email: str, session: AsyncSession | None = None
+    ) -> User | None:
+        """Select a user by their email address."""
+        query = select(User).where(User.email == email)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.one_or_none()
+
+    async def select_user_by_label_studio_id(
+        self, label_studio_id: str, session: AsyncSession | None = None
+    ) -> User | None:
         """Select a user by their Label Studio ID."""
-        async with AsyncSession(self.engine) as session:
-            result = await session.exec(
-                select(User).where(User.label_studio_id == label_studio_id)
-            )
+        query = select(User).where(User.label_studio_id == label_studio_id)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
 
         return result.one_or_none()

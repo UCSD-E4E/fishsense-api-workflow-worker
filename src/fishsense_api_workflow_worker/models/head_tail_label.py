@@ -18,6 +18,7 @@ class HeadTailLabel(SQLModel, table=True):
     tail_x: int | None = Field(default=None)
     tail_y: int | None = Field(default=None)
     updated_at: datetime | None = Field(sa_type=DateTime(timezone=True), default=None)
+    completed: bool | None = Field(default=False)
     json: Dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
 
     image_id: int | None = Field(default=None, foreign_key="image.id")
@@ -37,11 +38,19 @@ class HeadTailLabel(SQLModel, table=True):
             tail_x=cls.__parse_x_y(task, "Fork")[0],
             tail_y=cls.__parse_x_y(task, "Fork")[1],
             updated_at=cls.__parse_updated_time(task),
+            completed=cls.__has_result(task),
             json=json.loads(task.json()),
         )
 
     @staticmethod
-    def __parse_x_y(task: Any, label: str) -> tuple[int, int]:
+    def __has_result(task: Any) -> bool:
+        return bool(task.annotations and task.annotations[0]["result"])
+
+    @staticmethod
+    def __parse_x_y(task: Any, label: str) -> tuple[int | None, int | None]:
+        if HeadTailLabel.__has_result(task) is False:
+            return None, None
+
         label_value = [
             result
             for result in task.annotations[0]["result"]

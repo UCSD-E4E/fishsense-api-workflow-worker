@@ -26,7 +26,9 @@ async def sync_users_into_postgres(
                 await conn.rollback()
                 return
 
-            existing_user = await database.select_user_by_email(user.email)
+            existing_user = await database.select_user_by_email(
+                user.email, session=conn
+            )
             if existing_user:
                 user.id = existing_user.id
 
