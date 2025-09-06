@@ -20,8 +20,8 @@ class LaserLabel(LabelStudioLabelBase, SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     label_studio_task_id: int | None = Field(default=None, unique=True, index=True)
-    x: int | None = Field(default=None)
-    y: int | None = Field(default=None)
+    x: float | None = Field(default=None)
+    y: float | None = Field(default=None)
     label: str | None = Field(default=None)
     updated_at: datetime | None = Field(sa_type=DateTime(timezone=True), default=None)
     completed: bool | None = Field(default=False)

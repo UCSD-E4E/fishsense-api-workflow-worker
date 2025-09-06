@@ -10,6 +10,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from fishsense_api_workflow_worker.models.camera import Camera
 from fishsense_api_workflow_worker.models.dive import Dive
+from fishsense_api_workflow_worker.models.dive_slate import DiveSlate
 from fishsense_api_workflow_worker.models.head_tail_label import HeadTailLabel
 from fishsense_api_workflow_worker.models.image import Image
 from fishsense_api_workflow_worker.models.laser_label import LaserLabel
@@ -17,6 +18,7 @@ from fishsense_api_workflow_worker.models.user import User
 
 
 class Database:
+    # pylint: disable=too-many-public-methods
     """Database interaction class for FishSense API Workflow Worker."""
 
     def __init__(self, database_url: str):
@@ -48,6 +50,18 @@ class Database:
         else:
             async with AsyncSession(self.engine) as session:
                 await session.merge(dive)
+
+                await session.commit()
+
+    async def insert_or_update_dive_slate(
+        self, dive_slate: DiveSlate, session: AsyncSession | None = None
+    ):
+        """Insert or update (upsert) a dive slate in the database."""
+        if session is not None:
+            await session.merge(dive_slate)
+        else:
+            async with AsyncSession(self.engine) as session:
+                await session.merge(dive_slate)
 
                 await session.commit()
 
@@ -115,6 +129,19 @@ class Database:
 
         return result.one_or_none()
 
+    async def select_dive_by_id(
+        self, dive_id: int, session: AsyncSession | None = None
+    ) -> Dive | None:
+        """Select a dive by its ID."""
+        query = select(Dive).where(Dive.id == dive_id)
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.one_or_none()
+
     async def select_dive_by_path(
         self, dive_path: str, session: AsyncSession | None = None
     ) -> Dive | None:
@@ -141,6 +168,38 @@ class Database:
 
         return result.all()
 
+    async def select_dives_by_ids(
+        self, dive_ids: Iterable[int], session: AsyncSession | None = None
+    ) -> Iterable[Dive]:
+        """Select dives by their IDs."""
+        query = (
+            select(Dive)
+            .where(Dive.id.in_(dive_ids))  # pylint: disable=no-member
+            .order_by(Dive.dive_datetime)
+        )
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
+    async def select_dive_slate_by_name(
+        self, name: str, session: AsyncSession | None = None
+    ) -> DiveSlate | None:
+        """Select a dive slate by its name."""
+        query = select(DiveSlate).where(DiveSlate.name == name)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.one_or_none()
+
     async def select_head_tail_labels_by_task_id(
         self, task_id: int, session: AsyncSession | None = None
     ) -> HeadTailLabel | None:
@@ -162,6 +221,22 @@ class Database:
     ) -> Iterable[HeadTailLabel]:
         """Select all head-tail labels."""
         query = select(HeadTailLabel)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
+    async def select_head_tail_labels_by_image_ids(
+        self, image_ids: Iterable[int], session: AsyncSession | None = None
+    ) -> Iterable[HeadTailLabel]:
+        """Select head-tail labels by their image IDs."""
+        query = select(HeadTailLabel).where(
+            HeadTailLabel.image_id.in_(image_ids)  # pylint: disable=no-member
+        )
 
         if session is None:
             async with AsyncSession(self.engine) as session:
@@ -201,6 +276,58 @@ class Database:
 
         return result.one_or_none()
 
+    async def select_images_by_checksum(
+        self, image_checksum: Iterable[str], session: AsyncSession | None = None
+    ) -> Iterable[Image]:
+        """Select canonical images by their checksums."""
+        query = select(Image).where(
+            and_(
+                Image.checksum.in_(image_checksum),  # pylint: disable=no-member
+                Image.is_canonical,
+            )
+        )
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
+    async def select_images_by_dive_ids(
+        self, dive_ids: Iterable[int], session: AsyncSession | None = None
+    ) -> Iterable[Image]:
+        """Select images by their dive IDs."""
+        query = (
+            select(Image)
+            .where(Image.dive_id.in_(dive_ids))  # pylint: disable=no-member
+            .order_by(Image.path)
+        )
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
+    async def select_images_by_ids(
+        self, image_ids: Iterable[int], session: AsyncSession | None = None
+    ) -> Iterable[Image]:
+        """Select images by their IDs."""
+        query = select(Image).where(
+            Image.id.in_(image_ids)  # pylint: disable=no-member
+        )
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
     async def select_laser_label_by_task_id(
         self, task_id: int, session: AsyncSession | None = None
     ) -> LaserLabel | None:
@@ -220,6 +347,22 @@ class Database:
     ) -> Iterable[LaserLabel]:
         """Select all laser labels."""
         query = select(LaserLabel)
+
+        if session is None:
+            async with AsyncSession(self.engine) as session:
+                result = await session.exec(query)
+        else:
+            result = await session.exec(query)
+
+        return result.all()
+
+    async def select_laser_labels_by_image_ids(
+        self, image_ids: Iterable[int], session: AsyncSession | None = None
+    ) -> Iterable[LaserLabel]:
+        """Select laser labels by their image IDs."""
+        query = select(LaserLabel).where(
+            LaserLabel.image_id.in_(image_ids)  # pylint: disable=no-member
+        )
 
         if session is None:
             async with AsyncSession(self.engine) as session:

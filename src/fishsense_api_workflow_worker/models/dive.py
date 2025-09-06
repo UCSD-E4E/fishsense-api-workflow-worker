@@ -14,5 +14,7 @@ class Dive(SQLModel, table=True):
     path: str = Field(max_length=255, unique=True, index=True)
     dive_datetime: datetime = Field(sa_type=DateTime(timezone=True), default=None)
     priority: Priority = Field(default=Priority.LOW, index=True)
+    flip_dive_slate: bool | None = Field(default=False)
 
     camera_id: int | None = Field(default=None, foreign_key="camera.id")
+    dive_slate_id: int | None = Field(default=None, foreign_key="diveslate.id")
