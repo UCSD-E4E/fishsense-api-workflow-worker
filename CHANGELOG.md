@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.11.0 (2025-09-06)
+
+### Features
+
+- Add dive slate
+  ([`1d1547a`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/1d1547af04341ea77113a5780bc3740f964c3383))
+
+
 ## v1.10.1 (2025-09-04)
 
 ### Bug Fixes
