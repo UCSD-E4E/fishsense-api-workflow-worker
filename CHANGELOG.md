@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.11.1 (2025-09-06)
+
+### Bug Fixes
+
+- Move json property so that it no longer shadows json on the base
+  ([`c0e7b7f`](https://github.com/UCSD-E4E/fishsense-api-workflow-worker/commit/c0e7b7fb4c5d8d21c86efec36554c33e3d4d6dbd))
+
+
 ## v1.11.0 (2025-09-06)
 
 ### Features
