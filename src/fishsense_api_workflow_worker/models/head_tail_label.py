@@ -26,7 +26,7 @@ class HeadTailLabel(LabelStudioLabelBase, SQLModel, table=True):
     tail_y: float | None = Field(default=None)
     updated_at: datetime | None = Field(sa_type=DateTime(timezone=True), default=None)
     completed: bool | None = Field(default=False)
-    json: Dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
+    label_studio_json: Dict[str, Any] | None = Field(default=None, sa_column=Column(JSON))
 
     image_id: int | None = Field(default=None, foreign_key="image.id")
     user_id: int | None = Field(default=None, foreign_key="user.id")
@@ -46,7 +46,7 @@ class HeadTailLabel(LabelStudioLabelBase, SQLModel, table=True):
             tail_y=cls.__parse_x_y(task, "Fork")[1],
             updated_at=cls.__parse_updated_time(task),
             completed=cls.label_studio_task_has_result(task),
-            json=json.loads(task.json()),
+            label_studio_json=json.loads(task.json()),
         )
 
     @staticmethod
