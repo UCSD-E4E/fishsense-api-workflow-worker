@@ -38,7 +38,7 @@ services:
       context: ../fishsense-api
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - 8080:8000 # Map host port 8080 to container port 8000 (my 8000 port is used by another service)
     environment:
       - E4EFS_DOCKER=true
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_admin_password
