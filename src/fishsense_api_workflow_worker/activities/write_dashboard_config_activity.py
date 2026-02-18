@@ -114,7 +114,13 @@ def write_dashboard_config_activity(
             "Temporal Workflows",
             "https://workflows.fishsense.e4e.ucsd.edu/",
             "simple-icons:temporal",
-        )
+        ),
+        __generate_link(
+            "Grafana",
+            "Grafana Logs",
+            "https://dashboard.waiter.ucsd.edu/a/grafana-lokiexplore-app/explore?patterns=[]&var-primary_label=service_name%7C%3D~%7C.%2B&from=now-15m&to=now&timezone=browser&var-lineFormat=&var-ds=df971qx9nho8wb&var-filters=&var-fields=&var-levels=&var-metadata=&var-jsonFields=&var-all-fields=&var-patterns=&var-lineFilterV2=&var-lineFilters=&var-filters_replica=",
+            "devicon:grafana",
+        ),
     ]
 
     target_config_path.parent.mkdir(parents=True, exist_ok=True)
