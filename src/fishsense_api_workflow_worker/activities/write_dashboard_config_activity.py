@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import Any, Dict, List
+from urllib.parse import urlencode
 
 import yaml
 from temporalio import activity
@@ -108,6 +109,30 @@ def write_dashboard_config_activity(
         ),
     ]
 
+    grafana_base_url = (
+        "https://dashboard.waiter.ucsd.edu/a/grafana-lokiexplore-app/explore"
+    )
+    grafana_query = {
+        "patterns": "[]",
+        "var-primary_label": "service_name|=~|.+",
+        "from": "now-15m",
+        "to": "now",
+        "timezone": "browser",
+        "var-lineFormat": "",
+        "var-ds": "df971qx9nho8wb",
+        "var-filters": "",
+        "var-fields": "",
+        "var-levels": "",
+        "var-metadata": "",
+        "var-jsonFields": "",
+        "var-all-fields": "",
+        "var-patterns": "",
+        "var-lineFilterV2": "",
+        "var-lineFilters": "",
+        "var-filters_replica": "",
+    }
+    grafana_logs_url = f"{grafana_base_url}?{urlencode(grafana_query)}"
+
     dashboard_config["services"]["Administration"] = [
         __generate_link(
             "Workflows",
@@ -118,7 +143,7 @@ def write_dashboard_config_activity(
         __generate_link(
             "Grafana",
             "Grafana Logs",
-            "https://dashboard.waiter.ucsd.edu/a/grafana-lokiexplore-app/explore?patterns=[]&var-primary_label=service_name%7C%3D~%7C.%2B&from=now-15m&to=now&timezone=browser&var-lineFormat=&var-ds=df971qx9nho8wb&var-filters=&var-fields=&var-levels=&var-metadata=&var-jsonFields=&var-all-fields=&var-patterns=&var-lineFilterV2=&var-lineFilters=&var-filters_replica=",
+            grafana_logs_url,
             "devicon:grafana",
         ),
     ]
